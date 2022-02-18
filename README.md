@@ -29,7 +29,7 @@ You'll need to create the front-end using `create-react-app`. Run the following 
 4. Install the following dependencies with `yarn`:
 
 - styled-components
-- react-router-dom
+- react-router-dom@5.2.0
 - react-icons
 - moment
 

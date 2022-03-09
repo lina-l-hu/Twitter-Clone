@@ -1,17 +1,23 @@
+import { Link, useHistory } from "react-router-dom";
 import { FiRepeat } from "react-icons/fi";
 import styled from "styled-components";
 import TweetActionBar from "./TweetActions/TweetActionBar";
 import Avatar from "./Avatar";
-import { PADDING } from "../constants";
+import { PADDING, COLORS } from "../constants";
 import moment from 'moment';
-import { COLORS } from "../constants";
 
 
-const SmallTweet = ( { isRetweetedPost, retweeterHandle, retweeterAuthor, avatarSrc,
+const SmallTweet = ( { tweetId, isRetweetedPost, retweeterHandle, retweeterAuthor, avatarSrc,
     authorHandle, authorName, status, date, mediaSrc } ) => {
 
-    const tweetDate = moment(date);
-    const formattedDate = tweetDate.format("MMM Do");     
+    const formattedDate = moment(date).format("MMM Do");
+
+    let history = useHistory();
+
+    function handleClick() {
+        history.push(`/tweet/${tweetId}`);
+    }
+    console.log("tweetId in smalltweet", tweetId)
 
     return (
         <Wrapper>
@@ -25,11 +31,10 @@ const SmallTweet = ( { isRetweetedPost, retweeterHandle, retweeterAuthor, avatar
                 <Avatar imgSrc={avatarSrc}></Avatar>
                 <Main>
                     <Header>
-                        <UserName>{authorName}</UserName>
-                        <UserHandle>@{authorHandle}</UserHandle>
-                        <Date>•  {formattedDate}</Date>
+                        <ProfileLink to={`/${authorHandle}`}>{authorName}</ProfileLink>
+                        <HandleSpan>@{authorHandle} • {formattedDate}</HandleSpan>
                     </Header>
-                    <Content>
+                    <Content onClick={handleClick}>
                         <Status>{status}</Status>
                         <MediaContent src={mediaSrc}></MediaContent>
                     </Content>
@@ -54,7 +59,7 @@ const RetweetedBar = styled.div`
     margin: 10px;
     margin-left: 30px;
     font-size: 20px;
-    color: gray;
+    color: ${COLORS.lightText};
 `;
 
 const RetweetedFrom = styled.h6`
@@ -81,23 +86,25 @@ const Header = styled.div`
     vertical-align: baseline;
 `;
 
-const UserName = styled.span`
+const ProfileLink = styled(Link)`
+    text-decoration: none; 
     font-weight: bold;
     font-size: 16px;
-    margin-right: 10px;
+    margin-right: 6px;
+
+    &:hover {
+        text-decoration: underline;
+    }
+
+    &:visited {
+        color: black;
+    }
 `;
 
-const UserHandle = styled.span`
+const HandleSpan = styled.span`
     font-size: 14px;
     font-weight: bold;
-    margin-right: 10px;
-    color: gray;
-`;
-
-const Date = styled.span`
-    font-size: 14px;
-    font-weight: bold;
-    color: gray;
+    color: ${COLORS.lightText};
 `;
 
 const Content = styled.div`

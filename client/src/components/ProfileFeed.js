@@ -1,25 +1,18 @@
-import { useEffect, useState, useReducer } from 'react';
 import styled from "styled-components";
+import SmallTweet from "./SmallTweet";
 
-import SmallTweet from './SmallTweet';
-import TweetTextbox from './TweetTextbox';
-import PageHeader from './PageHeader';
-import { COLORS } from '../constants';
 
-const HomeFeed = ({status, tweetIds, tweetsById}) => {
-    console.log("in homefeed");
-    console.log("status", status)
 
-    return (
-      <Wrapper>
-        {(status === "loading" && 
-            <h3>Feed is loading!</h3>)}
+
+const ProfileFeed = ({status, tweetIds, tweetsById}) => {
     
-        {(status === "idle" &&
-          <>
-          <PageHeader>Home</PageHeader>
-          <TweetTextbox /> 
-          {tweetIds.map((id) => {
+    return (
+    <Wrapper>
+        {((status === "loading") &&
+            <h3>loading!</h3>)}
+        {(status === "idle" && 
+        <>
+            {tweetIds.map((id) => {
             let tweet = tweetsById[id];
             if (Object.keys(tweet).includes("retweetFrom")) {
               return (
@@ -43,20 +36,14 @@ const HomeFeed = ({status, tweetIds, tweetsById}) => {
             }
           })
         }         
-        </>  
+        </>
         )}
-        
-      </Wrapper>
-    );
-};
+    </Wrapper>
+    )
+}
 
 const Wrapper = styled.div`
-  `
+`
+export default ProfileFeed;
 
-// const PageTitle = styled.div`
-//     padding: 10px;
-//     padding-left: 20px;
-//     border: 1px solid ${COLORS.outlineColor};
-//     width: 100%;
-// `
-export default HomeFeed;
+

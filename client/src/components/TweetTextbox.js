@@ -1,7 +1,7 @@
 import { useContext, useRef, useEffect, useState } from "react";
 import Tweet from "./Tweet";
 import Avatar from "./Avatar";
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import { CurrentUserContext } from "./CurrentUserContext";
 import { COLORS, PADDING } from "../constants";
 
@@ -12,13 +12,13 @@ const TweetTextbox = () => {
     const [tweetInput, setTweetInput] = useState("");
     const textAreaRef = useRef();
 
-    const [charCount, setCharCount] = useState(0);
+    const [charCountLeft, setCharCountLeft] = useState(0);
 
     //on keydown event listener
     useEffect(() => {
         const updateInputtedText = () => {
             setTweetInput(textAreaRef.current.value);
-            setCharCount(textAreaRef.current.value.length);
+            setCharCountLeft(280 - textAreaRef.current.value.length);
         }
 
         textAreaRef.current.addEventListener("keyup", updateInputtedText); 
@@ -29,7 +29,7 @@ const TweetTextbox = () => {
     }, [])
 
     const sendTweet = () => {
-        
+
     }
 
 
@@ -41,13 +41,17 @@ const TweetTextbox = () => {
                 <TweetBox ref={textAreaRef} id="newTweet" name="newTweet" rows="7" placeholder="What's happening?">
                 </TweetBox>
                 <ButtonArea>
-                    <span>{280-charCount}</span>
-                    <button type="submit">Meow</button>
+                    <CharCount almostCharLimit={(charCountLeft <= 55 && charCountLeft >= 0)}
+                                overCharLimit={(charCountLeft < 0)}>
+                        {charCountLeft}
+                    </CharCount>
+                    <button className="largeButton" type="submit">Meow</button>
                 </ButtonArea>
             </Main>
         </Wrapper>
     )
 }
+
 
 const Wrapper = styled.div`
     display: flex;
@@ -76,20 +80,17 @@ const ButtonArea = styled.div`
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    span {
-       margin: 0 20px;
-       color: ${COLORS.outlineColor};
-    }
-    button {
-        background-color: ${COLORS.primary};
-        border-radius: 40px;
-        border: none;
-        color: white;
-        font-size: 16px;
-        font-weight: bold;
-        padding: 10px 20px;
-    }
+    
     /* button has to have a gray filter after submit */
-`;
+    `;
+
+const CharCount = styled.span`
+    margin: 0 20px;
+    color: ${COLORS.outlineColor};
+    ${props => props.almostCharLimit && css`
+    color: #ffcc00;`}
+    ${props => props.overCharLimit && css`
+     color: red;`}
+`
 
 export default TweetTextbox;

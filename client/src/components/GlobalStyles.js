@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components";
+import { COLORS } from "../constants";
 
 const GlobalStyles = createGlobalStyle`
   *,
@@ -48,6 +49,16 @@ const GlobalStyles = createGlobalStyle`
 
   h1 {
     font-size: 28px;
+  }
+
+  .largeButton {
+    background-color: ${COLORS.primary};
+        border-radius: 40px;
+        border: none;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 10px 20px;
   }
 `
 

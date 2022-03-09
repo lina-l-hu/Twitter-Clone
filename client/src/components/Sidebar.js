@@ -24,7 +24,7 @@ const Sidebar = () => {
             </NavDiv>
             <NavDiv>
                 <FiUser className="icon"/>
-                <NavigationLink to={`/profile/${currentUserHandle}`} activeClassName="active" exact>Profile</NavigationLink>
+                <NavigationLink to={`/${currentUserHandle}`} activeClassName="active" exact>Profile</NavigationLink>
             </NavDiv>
             <NavDiv>
                 <FiBell className="icon"/>
@@ -33,6 +33,9 @@ const Sidebar = () => {
             <NavDiv>
                 <FiBookmark className="icon"/>
                 <NavigationLink to="/bookmarks" activeClassName="active" exact>Bookmarks</NavigationLink>
+            </NavDiv>
+            <NavDiv>
+                <TweetButton className="largeButton">Meow</TweetButton>
             </NavDiv>
         </Wrapper>
     )
@@ -72,5 +75,9 @@ const NavigationLink = styled(NavLink)`
         color: ${COLORS.primary};
     }
 `
+
+const TweetButton = styled.button`
+    width: 100%;
+`;
 
 export default Sidebar;

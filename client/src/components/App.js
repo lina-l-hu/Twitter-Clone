@@ -13,6 +13,7 @@ import { CurrentUserContext } from "./CurrentUserContext";
 
 
 
+
 const initialState = {
   homefeedTweetIds: null,
   homefeedTweetsById: null, 
@@ -27,12 +28,12 @@ const reducer = (state, action) => {
         ...state,
         homefeedTweetIds: action.tweetIds,
         homefeedTweetsById: action.tweetsById, 
-        status: "loaded",
+        status: "idle",
       }
 
     case ("failure-loading-homefeed-data-from-server"):
       return {
-        ...state,
+        ...initialState,
         status: "failed",
         error: action.error,
       }
@@ -52,11 +53,9 @@ const App = () => {
     fetch("/api/me/profile")
       .then((res) => res.json())
       .then((data) => {
-        console.log("data", data.profile.handle)
         receiveProfileDataFromServer(data);
       })
       .catch((err) => {
-        console.log("profile load err", err);
         failureLoadingProfileDataFromServer(err);
       })
     }, [])
@@ -85,7 +84,7 @@ const App = () => {
     <Wrapper>
       {(status === "loading" && 
           <h3>Page is loading!</h3>)}
-      {(status !== "loading" && 
+      {(status === "idle" && 
       <Router>
       <GlobalStyles />
       <Sidebar />
@@ -114,6 +113,7 @@ const App = () => {
 
 const Wrapper = styled.div`
   display: flex;
+
 `
 
 export default App;

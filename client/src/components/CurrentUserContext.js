@@ -5,6 +5,7 @@ export const CurrentUserContext = createContext(null);
 const initialState = {
     currentUser: null, 
     status: "loading",
+    error: null,
 }
 
 const reducer = (state, action) => {
@@ -16,6 +17,14 @@ const reducer = (state, action) => {
                 status: "idle", 
             }
         }
+
+        case ("failure-loading-profile-data-from-server"): {
+            return {
+                ...initialState, 
+                status: "failed",
+                error: action.error,
+            }
+        }
     }
 }
 
@@ -23,17 +32,7 @@ export const CurrentUserProvider = ({children}) => {
 
     const [state, dispatch] = useReducer(reducer, initialState);
     
-    // Fetch the user data from the API (/me/profile)
-    useEffect(() => {
-        fetch("/api/me/profile")
-          .then((res) => res.json())
-          .then((data) => {
-            console.log("data", data)
-            receiveProfileDataFromServer(data);
-          });
-      }, [])
-
-    
+ 
     const receiveProfileDataFromServer = (data) => {
         dispatch({
             type: "receive-profile-data-from-server", 
@@ -41,9 +40,17 @@ export const CurrentUserProvider = ({children}) => {
         })
     }
     
+    const failureLoadingProfileDataFromServer = (err) => {
+        dispatch({
+            type: "failure-loading-profile-data-from-server", 
+            error: err,
+        })
+    }
     return (
-        <CurrentUserContext.Provider value={{ state, 
-                                            actions: {receiveProfileDataFromServer}}}>
+        <CurrentUserContext.Provider 
+        value={{ state, 
+                 actions: {receiveProfileDataFromServer, 
+                 failureLoadingProfileDataFromServer}}}>
             {children}
         </CurrentUserContext.Provider>
     );

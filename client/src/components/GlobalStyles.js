@@ -45,6 +45,10 @@ const GlobalStyles = createGlobalStyle`
   ol, ul {
     list-style: none;
   }
+
+  h1 {
+    font-size: 28px;
+  }
 `
 
 export default GlobalStyles;

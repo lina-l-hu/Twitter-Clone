@@ -146,7 +146,7 @@ If all goes well, you should receive the following response:
 
 ## Tweet Endpoints
 
-### GET /api/tweet/:tweetId
+### GET /api/tweet/:tweetId -- BIGTWEET
 
 Returns data about the specified tweet.
 
@@ -198,7 +198,7 @@ Some things worth highlighting:
 
 > **IMPORTANT:** this is the 'standard' tweet data format. When an API endpoint returns a tweet, it's probably going to come in this format.
 
-### POST /api/tweet
+### POST /api/tweet  - NEWTWEET
 
 Create a new tweet from the current user. This is the endpoint you'll want to hit when you compose a new tweet and click "tweet" (or "meow").
 

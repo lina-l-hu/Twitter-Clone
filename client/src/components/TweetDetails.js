@@ -1,4 +1,5 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+import { FiLoader } from "react-icons/fi";
 import { useHistory } from "react-router-dom";
 import { useReducer, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -61,15 +62,15 @@ const TweetDetails = () => {
 
     return (
       <Wrapper>
-        {/* <StyledLink to={`/`}> */}
-        {/* </StyledLink> */}
       <PageHeader>
         <FiArrowLeft style={{marginRight: "10px"}} onClick={history.goBack}/>
         Meow
       </PageHeader>
 
-      {((tweetState.status === "loading") &&
-            <h3>loading!</h3>)}
+      {(tweetState.status === "loading" && 
+            <LoadingDiv>
+              <FiLoader className="loadingIcon"/>
+            </LoadingDiv>)}
         {(tweetState.status === "idle" && 
         <>
           {(Object.keys(tweetState.tweetDetails).includes("retweetFrom")) && (
@@ -100,5 +101,26 @@ const TweetDetails = () => {
 
 const Wrapper = styled.div`
   width: 100%;
+`
+const spinning = keyframes`
+from {
+  transform: rotate(0deg);
+}
+to {
+  transform: rotate(360deg);
+}
+`;
+
+const LoadingDiv = styled.div`
+  display: flex;
+  justify-content: center;
+
+  .loadingIcon {
+    width: 30px;
+    height: 30px;
+    margin-top: 100px;
+    animation: ${spinning} 500ms infinite;
+    animation-timing-function: linear;
+  }
 `
 export default TweetDetails;

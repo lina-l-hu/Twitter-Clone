@@ -1,6 +1,6 @@
 import { useEffect, useState, useReducer, useContext } from 'react';
-import styled from "styled-components";
-
+import styled, { keyframes } from "styled-components";
+import { FiLoader } from "react-icons/fi";
 import SmallTweet from './SmallTweet';
 import TweetTextbox from './TweetTextbox';
 import PageHeader from './PageHeader';
@@ -64,8 +64,11 @@ const HomeFeed = () => {
       <Wrapper>
         <PageHeader>Home</PageHeader>
         <TweetTextbox /> 
+
         {(feedState.status === "loading" && 
-            <h3>Feed is loading!</h3>)}
+            <LoadingDiv>
+              <FiLoader className="loadingIcon"/>
+            </LoadingDiv>)}
     
         {(feedState.status === "idle" &&
           <>
@@ -105,8 +108,32 @@ const HomeFeed = () => {
 };
 
 const Wrapper = styled.div`
+  /* display: flex;
+  flex-direction: column; */
   width: 100%;
   `
+
+const spinning = keyframes`
+from {
+  transform: rotate(0deg);
+}
+to {
+  transform: rotate(360deg);
+}
+`;
+
+const LoadingDiv = styled.div`
+  display: flex;
+  justify-content: center;
+
+  .loadingIcon {
+    width: 30px;
+    height: 30px;
+    margin-top: 100px;
+    animation: ${spinning} 500ms infinite;
+    animation-timing-function: linear;
+  }
+`
 
 // const PageTitle = styled.div`
 //     padding: 10px;

@@ -1,6 +1,7 @@
 import { useContext, useRef, useEffect, useState } from "react";
 import Avatar from "./Avatar";
-import styled, {css} from "styled-components";
+import styled, { keyframes, css } from "styled-components";
+import { FiLoader } from "react-icons/fi";
 import { CurrentUserContext } from "./CurrentUserContext";
 import { COLORS, PADDING } from "../constants";
 
@@ -15,6 +16,8 @@ const TweetTextbox = () => {
     const [charCountLeft, setCharCountLeft] = useState(MAXNUMCHARS);
 
     const textAreaRef = useRef();
+
+    const [sendState, setSendState ] = useState(false);
 
     //on keydown event listener
     useEffect(() => {
@@ -37,6 +40,7 @@ const TweetTextbox = () => {
         console.log(data);
 
         if (charCountLeft >=0 && charCountLeft !== MAXNUMCHARS) {
+            setSendState(true);
             fetch("/api/tweet", {
                 method: "POST",
                 headers: {
@@ -48,14 +52,18 @@ const TweetTextbox = () => {
                 })
                 .then(res => res.json())
                 .then(data => {
+                    setSendState(false);
                     console.log(data);
                     setNewTweetCount((newTweetCount) => (newTweetCount+1));
                     textAreaRef.current.value = "";
                     setTweetInput("");
+                    setCharCountLeft(MAXNUMCHARS);
 
                 })
                 .catch((err) => {
                     console.log("error for post tweet", err);
+                    setSendState(false);
+
                 })
         }
     }
@@ -72,7 +80,8 @@ const TweetTextbox = () => {
                         {charCountLeft}
                     </CharCount>
                     <SubmitButton className="largeButton" type="submit" 
-                        disabled={(charCountLeft < 0)} onClick={sendTweet}>Meow</SubmitButton>
+                        disabled={(charCountLeft < 0) || (sendState===true)} onClick={sendTweet}
+                        >{(sendState) ? <FiLoader className="icon"/> : "Meow"}</SubmitButton>
                 </ButtonArea>
             </Main>
         </Wrapper>
@@ -108,12 +117,25 @@ const ButtonArea = styled.div`
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    
-    /* button has to have a gray filter after submit */
     `;
 
+const spinning = keyframes`
+from {
+  transform: rotate(0deg);
+}
+to {
+  transform: rotate(360deg);
+}
+`;
+
 const SubmitButton = styled.button`
-    background-color: ${props => (props.disabled ? `${COLORS.outlineColor}` : `${COLORS.primary}`)}
+    background-color: ${props => (props.disabled ? `${COLORS.outlineColor}` : `${COLORS.primary}`)};
+    width: 90px;
+
+    .icon {
+        animation: ${spinning} 500ms infinite;
+        animation-timing-function: linear;
+    }
 `
 
 const CharCount = styled.span`

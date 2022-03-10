@@ -7,8 +7,8 @@ import { PADDING, COLORS } from "../constants";
 import moment from 'moment';
 
 
-const BigTweet = ( { isRetweetedPost, retweeterHandle, retweeterAuthor, avatarSrc,
-    authorHandle, authorName, status, date, mediaSrc } ) => {
+const BigTweet = ( { tweetId, isRetweetedPost, retweeterHandle, retweeterAuthor, avatarSrc,
+    authorHandle, authorName, status, date, mediaSrc, numLikes, numRetweets, isLiked, isRetweeted} ) => {
     
     const postTime = moment(date).format("h:mm A");
     const postDate = moment(date).format("MMM DD YYYY");
@@ -37,7 +37,8 @@ const BigTweet = ( { isRetweetedPost, retweeterHandle, retweeterAuthor, avatarSr
                 </Content>
                 <Date>{postTime} • {postDate} • Critter web app</Date>
             </TweetWrapper>
-            <TweetActionBar />
+            <TweetActionBar numLikes={numLikes} numRetweets={numRetweets} 
+                isLiked={isLiked} isRetweeted={isRetweeted} tweetId={tweetId}/>
         </Wrapper>
     );
 }
@@ -49,7 +50,7 @@ const Wrapper = styled.div`
     padding: ${PADDING};
     border: 1px solid ${COLORS.outlineColor};
     border-top: none;
-    /* width: 100%; */
+    width: 100%;
 `;
 
 const RetweetedBar = styled.div`
@@ -74,6 +75,7 @@ const TweetWrapper = styled.div`
 const Header = styled.div`
     display: flex;
     justify-content: flex-start;
+    width: 100%;
 
     div {
         display: flex;
@@ -113,6 +115,7 @@ const Date = styled.span`
 `;
 
 const Content = styled.div`
+    width: 100%;
 `;
 
 const Status = styled.p`

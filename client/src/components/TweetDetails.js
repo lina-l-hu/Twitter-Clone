@@ -78,6 +78,8 @@ const TweetDetails = () => {
                 authorHandle={tweetState.tweetDetails.retweetFrom.handle} authorName={tweetState.tweetDetails.retweetFrom.displayName}
                 status={tweetState.tweetDetails.status} date={tweetState.tweetDetails.timestamp} 
                 mediaSrc={((tweetState.tweetDetails.media).length !== 0) ? (tweetState.tweetDetails.media[0]).url: undefined}
+                numLikes={tweetState.tweetDetails.numLikes} numRetweets={tweetState.tweetDetails.numRetweets}
+                isLiked={tweetState.tweetDetails.isLiked} isRetweeted={tweetState.tweetDetails.isRetweeted}
                 />
           )}
           {!(Object.keys(tweetState.tweetDetails).includes("retweetFrom")) && (
@@ -86,6 +88,8 @@ const TweetDetails = () => {
                 authorHandle={tweetState.tweetDetails.author.handle} authorName={tweetState.tweetDetails.author.displayName}
                 status={tweetState.tweetDetails.status} date={tweetState.tweetDetails.timestamp} 
                 mediaSrc={((tweetState.tweetDetails.media).length !== 0) ? (tweetState.tweetDetails.media[0]).url: undefined}
+                numLikes={tweetState.tweetDetails.numLikes} numRetweets={tweetState.tweetDetails.numRetweets}
+                isLiked={tweetState.tweetDetails.isLiked} isRetweeted={tweetState.tweetDetails.isRetweeted}
                 />
           )}
         </>
@@ -95,5 +99,6 @@ const TweetDetails = () => {
   };
 
 const Wrapper = styled.div`
+  width: 100%;
 `
 export default TweetDetails;

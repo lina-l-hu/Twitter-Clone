@@ -19,10 +19,6 @@ const Wrapper = styled.div`
     justify-content: space-evenly;
     width: 100%;
     
-    *{
-        box-sizing: border-box;
-    }
-    
     button {
         flex: 1;
         display: block;
@@ -32,6 +28,7 @@ const Wrapper = styled.div`
         text-decoration: none;
         background: white;
         border: none;
+        border-bottom: 1px solid ${COLORS.outlineColor};
         border-radius: none;
         font-size: 16px;
         font-weight: 600;

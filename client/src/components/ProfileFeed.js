@@ -21,6 +21,8 @@ const ProfileFeed = ({status, tweetIds, tweetsById}) => {
                   authorHandle={tweet.retweetFrom.handle} authorName={tweet.retweetFrom.displayName}
                   status={tweet.status} date={tweet.timestamp} 
                   mediaSrc={((tweet.media).length !== 0) ? (tweet.media[0]).url: undefined}
+                  numLikes={tweet.numLikes} numRetweets={tweet.numRetweets}
+                  isLiked={tweet.isLiked} isRetweeted={tweet.isRetweeted}
                   />
               )
             }
@@ -31,6 +33,8 @@ const ProfileFeed = ({status, tweetIds, tweetsById}) => {
                   authorHandle={tweet.author.handle} authorName={tweet.author.displayName}
                   status={tweet.status} date={tweet.timestamp} 
                   mediaSrc={((tweet.media).length !== 0) ? (tweet.media[0]).url: undefined}
+                  numLikes={tweet.numLikes} numRetweets={tweet.numRetweets}
+                  isLiked={tweet.isLiked} isRetweeted={tweet.isRetweeted}
                   />
               )
             }

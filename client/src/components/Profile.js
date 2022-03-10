@@ -127,7 +127,7 @@ const Profile = () => {
                 <FollowButton className="largeButton">Following</FollowButton>
               )}
               {(!(userProfile.user.isBeingFollowedByYou) && (userProfile.user.handle !== handle) &&
-                <FollowButton className="largeButton">Follow</FollowButton>
+                <FollowButton className="largeButton" style={{background: "white"}}>Follow</FollowButton>
               )}
               </div>
           </ImageDiv>
@@ -180,6 +180,7 @@ const Wrapper = styled.div`
 
 const Header = styled.div`
   border: 1px solid ${COLORS.outlineColor};
+  border-bottom: none;
 
   div {
     margin: 5px 0;
@@ -224,6 +225,7 @@ const ProfileImg = styled.img`
 `
 const FollowButton = styled.button`
   margin-top: 80px;
+  border: 1px solid ${COLORS.primary};
 `
 
 const IsFollowing = styled.span`

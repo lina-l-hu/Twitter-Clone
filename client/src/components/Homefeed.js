@@ -34,8 +34,6 @@ const reducer = (state, action) => {
     }
 }
 
-// status={feedState.status} tweetIds={feedState.tweetIds} tweetsById={feedState.tweetsById}
-
 const HomeFeed = () => {
 
   const { newTweetCount } = useContext(CurrentUserContext);
@@ -79,7 +77,9 @@ const HomeFeed = () => {
                   retweeterAuthor={tweet.author.displayName} avatarSrc={tweet.retweetFrom.avatarSrc}
                   authorHandle={tweet.retweetFrom.handle} authorName={tweet.retweetFrom.displayName}
                   status={tweet.status} date={tweet.timestamp} 
-                  mediaSrc={((tweet.media).length !== 0) ? (tweet.media[0]).url: undefined}
+                  mediaSrc={((tweet.media).length !== 0) ? (tweet.media[0]).url: undefined} 
+                  numLikes={tweet.numLikes} numRetweets={tweet.numRetweets}
+                  isLiked={tweet.isLiked} isRetweeted={tweet.isRetweeted}
                   />
               )
             }
@@ -90,6 +90,8 @@ const HomeFeed = () => {
                   authorHandle={tweet.author.handle} authorName={tweet.author.displayName}
                   status={tweet.status} date={tweet.timestamp} 
                   mediaSrc={((tweet.media).length !== 0) ? (tweet.media[0]).url: undefined}
+                  numLikes={tweet.numLikes} numRetweets={tweet.numRetweets}
+                  isLiked={tweet.isLiked} isRetweeted={tweet.isRetweeted}
                   />
               )
             }
@@ -103,6 +105,7 @@ const HomeFeed = () => {
 };
 
 const Wrapper = styled.div`
+  width: 100%;
   `
 
 // const PageTitle = styled.div`

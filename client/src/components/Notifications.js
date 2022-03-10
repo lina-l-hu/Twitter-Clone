@@ -1,5 +1,7 @@
+import PageHeader from "./PageHeader";
+
 const Notifications = () => {
-    return <div>Note</div>;
+    return <PageHeader>Notifications</PageHeader>;
   };
 
 export default Notifications;

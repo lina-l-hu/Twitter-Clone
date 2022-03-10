@@ -8,7 +8,7 @@ import moment from 'moment';
 
 
 const SmallTweet = ( { tweetId, isRetweetedPost, retweeterHandle, retweeterAuthor, avatarSrc,
-    authorHandle, authorName, status, date, mediaSrc } ) => {
+    authorHandle, authorName, status, date, mediaSrc, numLikes, numRetweets, isLiked, isRetweeted } ) => {
 
     const formattedDate = moment(date).format("MMM Do");
 
@@ -37,7 +37,8 @@ const SmallTweet = ( { tweetId, isRetweetedPost, retweeterHandle, retweeterAutho
                         <Status>{status}</Status>
                         <MediaContent src={mediaSrc}></MediaContent>
                     </Content>
-                    <TweetActionBar />
+                    <TweetActionBar numLikes={numLikes} numRetweets={numRetweets}
+                        isLiked={isLiked} isRetweeted={isRetweeted} tweetId={tweetId}/>
                 </Main>
             </TweetWrapper>
         </Wrapper>

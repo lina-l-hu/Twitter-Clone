@@ -1,5 +1,4 @@
 import { useContext, useRef, useEffect, useState } from "react";
-import Tweet from "./Tweet";
 import Avatar from "./Avatar";
 import styled, {css} from "styled-components";
 import { CurrentUserContext } from "./CurrentUserContext";
@@ -86,6 +85,7 @@ const Wrapper = styled.div`
     border: 1px solid ${COLORS.outlineColor};
     border-top: none;
     padding: ${PADDING};
+    width: 100%;
     `;
 
 const Main = styled.div`

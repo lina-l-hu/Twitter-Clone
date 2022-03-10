@@ -1,5 +1,7 @@
+import PageHeader from "./PageHeader";
+
 const Bookmarks = () => {
-    return <div>bookmard</div>;
+    return <PageHeader>Bookmarks</PageHeader>
   };
 
 export default Bookmarks;

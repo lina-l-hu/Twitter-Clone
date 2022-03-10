@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { COLORS, PADDING } from "../constants";
 import Avatar from "./Avatar";
 
-const PreviewTooltip = ({avatarSrc, authorName, authorHandle,
+const ProfilePreview = ({avatarSrc, authorName, authorHandle,
     bio, numFollowers, numFollowing}) => {
 
     return (
@@ -31,11 +31,11 @@ const PreviewTooltip = ({avatarSrc, authorName, authorHandle,
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
-    padding: ${PADDING};
+    padding: 14px;
     font-size: 16px;
     background-color: white;
     z-index: 10;
-    width: 400px;
+    width: 350px;
     box-shadow: 0 0 5px ${COLORS.outlineColor};
 
     .author {
@@ -63,4 +63,4 @@ const Wrapper = styled.div`
     }
 `
 
-export default PreviewTooltip;
+export default ProfilePreview;

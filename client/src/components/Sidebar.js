@@ -6,6 +6,8 @@ import { FiHome, FiUser, FiBell, FiBookmark } from "react-icons/fi";
 import { COLORS } from "../constants";
 import { ReactComponent as CritterLogo } from '../assets/logo.svg';
 import { CurrentUserContext } from "./CurrentUserContext";
+import CustomTippy from "./CustomTippy";
+import TweetTextbox from "./TweetTextbox";
 
 
 
@@ -42,7 +44,12 @@ const Sidebar = () => {
                 <NavigationLink to="/bookmarks" activeClassName="active" exact>Bookmarks</NavigationLink>
             </NavDiv>
             <NavDiv>
-                <TweetButton className="largeButton">Meow</TweetButton>
+                {(status === "idle") ? (
+                    <CustomTippy content={<TweetTextbox/>} >
+                        <TweetButton className="largeButton">Meow</TweetButton>
+                    </CustomTippy>
+                ) : (<TweetButton className="largeButton">Meow</TweetButton>)
+                }
             </NavDiv>
         </Wrapper>
     )

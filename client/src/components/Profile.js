@@ -8,6 +8,7 @@ import { CurrentUserContext } from "./CurrentUserContext";
 import ProfileTabs from "./ProfileTabs";
 import ProfileFeed from "./ProfileFeed";
 import ErrorHandler from "./ErrorHandler";
+import FollowButton from "./FollowButton";
 
 const initialProfileState = {
   user: null, 
@@ -65,7 +66,7 @@ const Profile = () => {
 
   const { profileId } = useParams();
 
-  const { state: { currentUser: { handle } } } = useContext(CurrentUserContext);
+  const { newTweetCount, state: { currentUser: { handle } }} = useContext(CurrentUserContext);
 
   const [userProfile, profileDispatch] = useReducer(profileReducer, initialProfileState);
 
@@ -113,7 +114,7 @@ const Profile = () => {
             error: err,
           });
         })
-      }, [])
+      }, [newTweetCount])
 
       if (errorState) {
         return <ErrorHandler />
@@ -130,13 +131,8 @@ const Profile = () => {
           <ImageDiv>
             <ProfileImg src={userProfile.user.avatarSrc} width="100px" height="100px"/>
             <div>
-              {(userProfile.user.isBeingFollowedByYou && (userProfile.user.handle !== handle) &&
-                <FollowButton className="largeButton">Following</FollowButton>
-              )}
-              {(!(userProfile.user.isBeingFollowedByYou) && (userProfile.user.handle !== handle) &&
-                <FollowButton className="largeButton" style={{background: "white"}}>Follow</FollowButton>
-              )}
-              </div>
+              <FollowButton handle={userProfile.user.handle} isBeingFollowedByYou={userProfile.user.isBeingFollowedByYou} numFollowing={userProfile.user.numFollowing}/>
+            </div>
           </ImageDiv>
           <div>
             <h2>{userProfile.user.displayName}</h2>
@@ -230,10 +226,10 @@ const ProfileImg = styled.img`
   height: 200px;
   border: 2px solid white;
 `
-const FollowButton = styled.button`
-  margin-top: 80px;
-  border: 1px solid ${COLORS.primary};
-`
+// const FollowButton = styled.button`
+//   margin-top: 80px;
+//   border: 1px solid ${COLORS.primary};
+// `
 
 const IsFollowing = styled.span`
   background-color: ${COLORS.outlineColor};

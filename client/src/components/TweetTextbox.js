@@ -186,9 +186,9 @@ const TweetTextbox = () => {
 const Wrapper = styled.div`
     display: flex;
     border: 1px solid ${COLORS.outlineColor};
-    border-top: none;
     padding: ${PADDING};
     width: 100%;
+    background-color: white;
     `;
 
 const Main = styled.div`
@@ -200,7 +200,7 @@ const Main = styled.div`
 
 const TweetBox = styled.textarea`
     border: none;
-    background-color: transparent;
+    background-color: white;
     resize: none;
     outline: none;
     width: 100%;
@@ -214,12 +214,12 @@ const ButtonArea = styled.div`
     `;
 
 const spinning = keyframes`
-from {
-  transform: rotate(0deg);
-}
-to {
-  transform: rotate(360deg);
-}
+    from {
+    transform: rotate(0deg);
+    }
+    to {
+    transform: rotate(360deg);
+    }
 `;
 
 const SubmitButton = styled.button`

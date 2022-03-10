@@ -14,43 +14,60 @@ const TweetActionBar = ( {tweetId, isLiked, isRetweeted, numLikes, numRetweets})
     error: null, 
   }
 
-  // const initialRetweetState = {
-  //   numRetweets: numRetweets,
-  //   isRetweetedByUser: isRetweeted,
-  //   error: null, 
-  // }
-
+  
   const likeReducer = (state, action) => {
     switch (action.type) {
       case ("liked"): 
-        return {
+      return {
         ...state, 
         isLikedByUser: true, 
         numTweetLikes: state.numTweetLikes+1, 
         error: null,
       }
       case ("unliked"): 
-        return {
+      return {
         ...state, 
         isLikedByUser: false, 
         numTweetLikes: state.numTweetLikes-1, 
         error: null,
       }
       case ("failed"): 
+      return {
+        ...state,
+        error: action.error,
+      }
+    }
+  }
+  
+  const initialRetweetState = {
+    isRetweetedByUser: isRetweeted,
+    numberRetweets: numRetweets,
+    error: null, 
+  }
+
+  const retweetReducer = (state, action) => { 
+    switch (action.type) {
+      case ("retweeted"): 
         return {
-          ...state,
-          error: action.error,
-        }
+        ...state, 
+        isRetweetedByUser: true, 
+        numberRetweets: state.numberRetweets+1, 
+        error: null,
+      }
+      case ("unretweeted"): 
+        return {
+        ...state, 
+        isRetweetedByUser: false, 
+        numberRetweets: state.numberRetweets-1, 
+        error: null,
+      }
     }
   }
 
-  // const retweetReducer = (state, action) => { 
-
-  // }
-
   const [likeState, likeDispatch] = useReducer(likeReducer, initialLikeState);
-  // const [retweetState, retweetDispatch] = useReducer(retweetReducer, initialRetweetState);
   
+  const [retweetState, retweetDispatch] = useReducer(retweetReducer, initialRetweetState);
+
   const handleToggleLike = () => {
       if (likeState.isLikedByUser === true) {
         fetch(`/api/tweet/${tweetId}/like`, {
@@ -104,14 +121,22 @@ const TweetActionBar = ( {tweetId, isLiked, isRetweeted, numLikes, numRetweets})
             })
           })
       }
-  }
+    }
   
-  // const handleToggleRetweet = () => {
-  //     setIsRetweeted(!isRetweeted);
-  //     (!isRetweeted) ? setNumOfRetweets((numOfRetweets)=>(numOfRetweets+1)) : setNumOfRetweets((numOfRetweets)=>(numOfRetweets-1));
-  // }
+  const handleToggleRetweet = () => {
+    if (retweetState.isRetweetedByUser === true) {
+      retweetDispatch ({
+        type: "unretweeted", 
+      })
+    }
+    else {
+      retweetDispatch ({
+        type: "retweeted", 
+      })
+    }
+  }
 
-  //add onClick to tweetactions!!! 
+
   return (
     <Wrapper>
       <div>
@@ -121,10 +146,10 @@ const TweetActionBar = ( {tweetId, isLiked, isRetweeted, numLikes, numRetweets})
       </div>
       <div>
         <>
-        <TweetAction color="rgb(23, 191, 99)" size={HIGHLIGHTSIZE}>
+        <TweetAction color="rgb(23, 191, 99)" size={HIGHLIGHTSIZE} onClick={handleToggleRetweet}>
           <FiRepeat className="icon"/>
         </TweetAction>
-        <span>{numRetweets}</span>
+        <span>{retweetState.numberRetweets}</span>
         </>
       </div>
       <div>

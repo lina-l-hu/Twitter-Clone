@@ -4,12 +4,9 @@ import styled from "styled-components";
 import TweetActionBar from "./TweetActions/TweetActionBar";
 import Avatar from "./Avatar";
 import { PADDING, COLORS } from "../constants";
-import PreviewTooltip from "./PreviewTooltip";
+import ProfilePreview from "./ProfilePreview";
 import moment from 'moment';
-import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css';
-import tippy, {followCursor} from 'tippy.js/headless';
-
+import CustomTippy from "./CustomTippy";
 
 const SmallTweet = ( { tweetId, isRetweetedPost, retweeterHandle, retweeterAuthor, avatarSrc,
     authorHandle, authorName, status, date, mediaSrc, numLikes, numRetweets, isLiked, isRetweeted, bio, numFollowers, numFollowing } ) => {
@@ -35,19 +32,13 @@ const SmallTweet = ( { tweetId, isRetweetedPost, retweeterHandle, retweeterAutho
                 <Avatar imgSrc={avatarSrc}></Avatar>
                 <Main>
                     <Header>
-                    <Tippy
-                        render={attrs => (
-                            <PreviewTooltip avatarSrc={avatarSrc} authorName={authorName} 
-                                authorHandle={authorHandle} bio={bio} 
-                                numFollowers={numFollowers} numFollowing={numFollowing}
-                                {...attrs}/>
-                        )}
-                        animation={true}
-                        // onMount={onMount}
-                        // onHide={onHide}
-                        >
+                    <CustomTippy content={
+                        <ProfilePreview avatarSrc={avatarSrc} authorName={authorName} 
+                            authorHandle={authorHandle} bio={bio} 
+                            numFollowers={numFollowers} numFollowing={numFollowing}
+                        />} >
                             <ProfileLink to={`/${authorHandle}`}>{authorName}</ProfileLink>
-                        </Tippy>
+                        </CustomTippy>
                         <HandleSpan>@{authorHandle} • {formattedDate}</HandleSpan>
                     </Header>
                     <Content onClick={handleClick}>

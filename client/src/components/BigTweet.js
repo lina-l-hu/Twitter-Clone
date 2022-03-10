@@ -5,10 +5,16 @@ import TweetActionBar from "./TweetActions/TweetActionBar";
 import Avatar from "./Avatar";
 import { PADDING, COLORS } from "../constants";
 import moment from 'moment';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
+import tippy, {followCursor} from 'tippy.js/headless';
+import PreviewTooltip from "./PreviewTooltip";
+
+
 
 
 const BigTweet = ( { tweetId, isRetweetedPost, retweeterHandle, retweeterAuthor, avatarSrc,
-    authorHandle, authorName, status, date, mediaSrc, numLikes, numRetweets, isLiked, isRetweeted} ) => {
+    authorHandle, authorName, status, date, mediaSrc, numLikes, numRetweets, isLiked, isRetweeted, bio, numFollowers, numFollowing} ) => {
     
     const postTime = moment(date).format("h:mm A");
     const postDate = moment(date).format("MMM DD YYYY");
@@ -25,7 +31,13 @@ const BigTweet = ( { tweetId, isRetweetedPost, retweeterHandle, retweeterAuthor,
             <Header>
                 <Avatar imgSrc={avatarSrc}></Avatar>
                 <div>
-                    <ProfileLink to={`/${authorHandle}`}>{authorName}</ProfileLink>
+                    <Tippy content={
+                            <PreviewTooltip avatarSrc={avatarSrc} authorName={authorName} 
+                                authorHandle={authorHandle} bio={bio} 
+                                numFollowers={numFollowers} numFollowing={numFollowing}
+                            />} arrow={false} style={{backgroundColor: "white"}}>
+                        <ProfileLink to={`/${authorHandle}`}>{authorName}</ProfileLink>
+                    </Tippy>
                     <UserHandle>@{authorHandle}</UserHandle>
                 </div>
             </Header>

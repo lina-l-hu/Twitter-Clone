@@ -6,6 +6,7 @@ import { Link, useParams } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import BigTweet from "./BigTweet";
 import PageHeader from "./PageHeader";
+import ErrorHandler from "./ErrorHandler";
 
 const initialState = {
   tweetDetails: null,
@@ -31,7 +32,7 @@ const reducer = (state, action) => {
     }
 }
 
-const TweetDetails = () => {
+const TweetDetails = ({errorState, setErrorState}) => {
 
   const { tweetId } = useParams();
 
@@ -53,12 +54,17 @@ const TweetDetails = () => {
       })
       .catch((err) => {
         console.log("tweet load err", err);
+        setErrorState(true);
         dispatch ({
           type: "failure-loading-tweet-data-from-server",
           error: err,
         });
       })
     }, [])
+
+    if (errorState) {
+      return <ErrorHandler />
+    }
 
     return (
       <Wrapper>
@@ -81,6 +87,8 @@ const TweetDetails = () => {
                 mediaSrc={((tweetState.tweetDetails.media).length !== 0) ? (tweetState.tweetDetails.media[0]).url: undefined}
                 numLikes={tweetState.tweetDetails.numLikes} numRetweets={tweetState.tweetDetails.numRetweets}
                 isLiked={tweetState.tweetDetails.isLiked} isRetweeted={tweetState.tweetDetails.isRetweeted}
+                bio={tweetState.tweetDetails.author.bio} numFollowers={tweetState.tweetDetails.author.numFollowers} 
+                numFollowing={tweetState.tweetDetails.author.numFollowing}
                 />
           )}
           {!(Object.keys(tweetState.tweetDetails).includes("retweetFrom")) && (
@@ -91,7 +99,8 @@ const TweetDetails = () => {
                 mediaSrc={((tweetState.tweetDetails.media).length !== 0) ? (tweetState.tweetDetails.media[0]).url: undefined}
                 numLikes={tweetState.tweetDetails.numLikes} numRetweets={tweetState.tweetDetails.numRetweets}
                 isLiked={tweetState.tweetDetails.isLiked} isRetweeted={tweetState.tweetDetails.isRetweeted}
-                />
+                bio={tweetState.tweetDetails.author.bio} numFollowers={tweetState.tweetDetails.author.numFollowers} 
+                numFollowing={tweetState.tweetDetails.author.numFollowing}/>
           )}
         </>
         )}

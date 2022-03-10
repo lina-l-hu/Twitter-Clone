@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { useEffect, useContext, useReducer } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import {ErrorBoundary} from 'react-error-boundary';
 import styled, { keyframes } from "styled-components";
 import { FiLoader } from "react-icons/fi";
@@ -17,8 +17,10 @@ import { CurrentUserContext } from "./CurrentUserContext";
 
 const App = () => {
   
-  const { state: { status, }, 
+  const { state: { status, error}, 
     actions: {receiveProfileDataFromServer, failureLoadingProfileDataFromServer} } = useContext(CurrentUserContext);
+
+  const [errorState, setErrorState] = useState(false);
 
     //Fetch the user data from the API (/me/profile)
     useEffect(() => {
@@ -28,23 +30,27 @@ const App = () => {
         receiveProfileDataFromServer(data);
       })
       .catch((err) => {
+        setErrorState(true);
         failureLoadingProfileDataFromServer(err);
       })
     }, [])
 
+    // if (errorState) {
+    //   return <ErrorHandler />
+    // }
+
   return (
-    <ErrorBoundary FallbackComponent={ErrorHandler}>
     <Wrapper>
 
+      <Router>
+        <GlobalStyles />
+        <Sidebar />
+        {(errorState) && <ErrorHandler/>}
       {(status === "loading" && 
             <LoadingDiv>
               <FiLoader className="loadingIcon"/>
             </LoadingDiv>)}
-
       {(status === "idle" &&
-      <Router>
-        <GlobalStyles />
-        <Sidebar />
         <Switch>
           <Route exact path="/">
             <Homefeed />
@@ -62,10 +68,9 @@ const App = () => {
             <Profile />
           </Route>
         </Switch>
-      </Router>
       )}
+      </Router>
     </Wrapper>
-    </ErrorBoundary>
   )
 };
 
@@ -87,7 +92,6 @@ const LoadingDiv = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-left: 200px;
   
   .loadingIcon {
     width: 30px;

@@ -11,10 +11,14 @@ import { CurrentUserContext } from "./CurrentUserContext";
 
 const Sidebar = () => {
 
-    const { state: { currentUser } } = useContext(CurrentUserContext);
+    const { state: { currentUser, status } } = useContext(CurrentUserContext);
 
-    const currentUserHandle = currentUser.handle;
-    
+    // let currentUserHandle = null;
+
+    // if (status !== "loading") {
+    //     currentUserHandle = currentUser.handle;
+    // }
+
     return (
         <Wrapper>
             <CritterLogo style={{ width: "50px", marginLeft: "-10px", marginBottom: "-10px"}} />
@@ -24,7 +28,10 @@ const Sidebar = () => {
             </NavDiv>
             <NavDiv>
                 <FiUser className="icon"/>
-                <NavigationLink to={`/${currentUserHandle}`} activeClassName="active" exact>Profile</NavigationLink>
+                {(status === "idle") ? 
+                ( <NavigationLink to={`/${currentUser.handle}`} activeClassName="active" exact>Profile</NavigationLink>)
+                : (<h3>Profile</h3>)
+                }
             </NavDiv>
             <NavDiv>
                 <FiBell className="icon"/>
@@ -61,6 +68,13 @@ const NavDiv = styled.div`
         vertical-align: center;
         width: 20px;
         height: 20px;
+    }
+
+    h3 {
+        font-size: 20px;
+        font-weight: bold; 
+        color: black;
+        text-decoration: none;
     }
 `
 

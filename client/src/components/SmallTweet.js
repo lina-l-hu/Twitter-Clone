@@ -4,12 +4,17 @@ import styled from "styled-components";
 import TweetActionBar from "./TweetActions/TweetActionBar";
 import Avatar from "./Avatar";
 import { PADDING, COLORS } from "../constants";
+import PreviewTooltip from "./PreviewTooltip";
 import moment from 'moment';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
+import tippy, {followCursor} from 'tippy.js/headless';
 
 
 const SmallTweet = ( { tweetId, isRetweetedPost, retweeterHandle, retweeterAuthor, avatarSrc,
-    authorHandle, authorName, status, date, mediaSrc, numLikes, numRetweets, isLiked, isRetweeted } ) => {
+    authorHandle, authorName, status, date, mediaSrc, numLikes, numRetweets, isLiked, isRetweeted, bio, numFollowers, numFollowing } ) => {
 
+        console.log("in small tweet", bio, numFollowers, numFollowing)
     const formattedDate = moment(date).format("MMM Do");
 
     let history = useHistory();
@@ -30,7 +35,19 @@ const SmallTweet = ( { tweetId, isRetweetedPost, retweeterHandle, retweeterAutho
                 <Avatar imgSrc={avatarSrc}></Avatar>
                 <Main>
                     <Header>
-                        <ProfileLink to={`/${authorHandle}`}>{authorName}</ProfileLink>
+                    <Tippy
+                        render={attrs => (
+                            <PreviewTooltip avatarSrc={avatarSrc} authorName={authorName} 
+                                authorHandle={authorHandle} bio={bio} 
+                                numFollowers={numFollowers} numFollowing={numFollowing}
+                                {...attrs}/>
+                        )}
+                        animation={true}
+                        // onMount={onMount}
+                        // onHide={onHide}
+                        >
+                            <ProfileLink to={`/${authorHandle}`}>{authorName}</ProfileLink>
+                        </Tippy>
                         <HandleSpan>@{authorHandle} • {formattedDate}</HandleSpan>
                     </Header>
                     <Content onClick={handleClick}>
@@ -52,6 +69,7 @@ const Wrapper = styled.div`
     padding: ${PADDING};
     border: 1px solid ${COLORS.outlineColor};
     border-top: none;
+    width: 100%;
 `;
 
 const RetweetedBar = styled.div`
@@ -108,12 +126,15 @@ const HandleSpan = styled.span`
 `;
 
 const Content = styled.div`
+    width: 100%;
+    padding: inherit;
 `;
 
 const Status = styled.p`
     font-size: 18px;
     font-weight: 500;
     margin: 12px 0;
+    word-wrap: break-word;
 `;
 
 const MediaContent = styled.img`

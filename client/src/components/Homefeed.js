@@ -5,6 +5,7 @@ import SmallTweet from './SmallTweet';
 import TweetTextbox from './TweetTextbox';
 import PageHeader from './PageHeader';
 import { CurrentUserContext } from './CurrentUserContext';
+import ErrorHandler from './ErrorHandler';
 import { COLORS } from '../constants';
 
 
@@ -40,6 +41,8 @@ const HomeFeed = () => {
 
   const [ feedState, dispatch ] = useReducer(reducer, initialState);
 
+  const [errorState, setErrorState] = useState(false);
+
     //Fetch homefeed data from the API
     useEffect(() => {
       fetch("/api/me/home-feed")
@@ -53,12 +56,17 @@ const HomeFeed = () => {
         })
         .catch((err) => {
           console.log("Error:", err);
+          setErrorState(true);
           dispatch({
             type: "failure-loading-homefeed-data-from-server",
             error: err,
           });
         })
       }, [newTweetCount])
+    
+      if (errorState) {
+        return <ErrorHandler />
+      }
 
     return (
       <Wrapper>
@@ -83,6 +91,7 @@ const HomeFeed = () => {
                   mediaSrc={((tweet.media).length !== 0) ? (tweet.media[0]).url: undefined} 
                   numLikes={tweet.numLikes} numRetweets={tweet.numRetweets}
                   isLiked={tweet.isLiked} isRetweeted={tweet.isRetweeted}
+                  bio={tweet.retweetFrom.bio} numFollowers={tweet.retweetFrom.numFollowers} numFollowing={tweet.retweetFrom.numFollowing}
                   />
               )
             }
@@ -95,6 +104,7 @@ const HomeFeed = () => {
                   mediaSrc={((tweet.media).length !== 0) ? (tweet.media[0]).url: undefined}
                   numLikes={tweet.numLikes} numRetweets={tweet.numRetweets}
                   isLiked={tweet.isLiked} isRetweeted={tweet.isRetweeted}
+                  bio={tweet.author.bio} numFollowers={tweet.author.numFollowers} numFollowing={tweet.author.numFollowing}
                   />
               )
             }

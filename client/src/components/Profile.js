@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useReducer, useEffect, useContext } from "react";
+import { useReducer, useEffect, useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import { FiCalendar, FiMapPin } from "react-icons/fi";
 import moment from 'moment';
@@ -7,6 +7,7 @@ import { PADDING, COLORS } from "../constants";
 import { CurrentUserContext } from "./CurrentUserContext";
 import ProfileTabs from "./ProfileTabs";
 import ProfileFeed from "./ProfileFeed";
+import ErrorHandler from "./ErrorHandler";
 
 const initialProfileState = {
   user: null, 
@@ -70,6 +71,8 @@ const Profile = () => {
 
   const [userFeed, feedDispatch] = useReducer(feedReducer, initialFeedState);
   
+  const [errorState, setErrorState] = useState(false);
+
   //fetch profile data for the user
   useEffect(() => {
     fetch(`/api/${profileId}/profile`)
@@ -104,6 +107,7 @@ const Profile = () => {
         })
         .catch((err) => {
           console.log("Error:", err);
+          setErrorState(true);
           feedDispatch({
             type: "failure-loading-userfeed-data-from-server",
             error: err,
@@ -111,6 +115,9 @@ const Profile = () => {
         })
       }, [])
 
+      if (errorState) {
+        return <ErrorHandler />
+      }
 
     return (
       <Wrapper>

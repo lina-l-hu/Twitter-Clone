@@ -23,6 +23,7 @@ const ProfileFeed = ({status, tweetIds, tweetsById}) => {
                   mediaSrc={((tweet.media).length !== 0) ? (tweet.media[0]).url: undefined}
                   numLikes={tweet.numLikes} numRetweets={tweet.numRetweets}
                   isLiked={tweet.isLiked} isRetweeted={tweet.isRetweeted}
+                  bio={tweet.retweetFrom.bio} numFollowers={tweet.retweetFrom.numFollowers} numFollowing={tweet.retweetFrom.numFollowing}
                   />
               )
             }
@@ -35,6 +36,7 @@ const ProfileFeed = ({status, tweetIds, tweetsById}) => {
                   mediaSrc={((tweet.media).length !== 0) ? (tweet.media[0]).url: undefined}
                   numLikes={tweet.numLikes} numRetweets={tweet.numRetweets}
                   isLiked={tweet.isLiked} isRetweeted={tweet.isRetweeted}
+                  bio={tweet.author.bio} numFollowers={tweet.author.numFollowers} numFollowing={tweet.author.numFollowing}
                   />
               )
             }

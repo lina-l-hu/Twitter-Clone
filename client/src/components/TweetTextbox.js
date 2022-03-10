@@ -7,18 +7,21 @@ import { COLORS, PADDING } from "../constants";
 
 const TweetTextbox = () => {
 
-    const { state: { currentUser: { avatarSrc } } } = useContext(CurrentUserContext);
+    const MAXNUMCHARS = 280;
+
+    const { state: { currentUser: { avatarSrc } }, newTweetCount, setNewTweetCount } = useContext(CurrentUserContext);
     
     const [tweetInput, setTweetInput] = useState("");
-    const textAreaRef = useRef();
+    
+    const [charCountLeft, setCharCountLeft] = useState(MAXNUMCHARS);
 
-    const [charCountLeft, setCharCountLeft] = useState(0);
+    const textAreaRef = useRef();
 
     //on keydown event listener
     useEffect(() => {
         const updateInputtedText = () => {
             setTweetInput(textAreaRef.current.value);
-            setCharCountLeft(280 - textAreaRef.current.value.length);
+            setCharCountLeft(MAXNUMCHARS - textAreaRef.current.value.length);
         }
 
         textAreaRef.current.addEventListener("keyup", updateInputtedText); 
@@ -28,24 +31,49 @@ const TweetTextbox = () => {
         }
     }, [])
 
+
     const sendTweet = () => {
 
+        const data = { status: tweetInput }
+        console.log(data);
+
+        if (charCountLeft >=0 && charCountLeft !== MAXNUMCHARS) {
+            fetch("/api/tweet", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify(data)
+                
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    setNewTweetCount((newTweetCount) => (newTweetCount+1));
+                    textAreaRef.current.value = "";
+                    setTweetInput("");
+
+                })
+                .catch((err) => {
+                    console.log("error for post tweet", err);
+                })
+        }
     }
-
-
 
     return (
         <Wrapper>
             <Avatar imgSrc={avatarSrc}/>
             <Main>
-                <TweetBox ref={textAreaRef} id="newTweet" name="newTweet" rows="7" placeholder="What's happening?">
+                <TweetBox ref={textAreaRef} id="newTweet" name="newTweet" rows="5" placeholder="What's happening?">
                 </TweetBox>
                 <ButtonArea>
                     <CharCount almostCharLimit={(charCountLeft <= 55 && charCountLeft >= 0)}
                                 overCharLimit={(charCountLeft < 0)}>
                         {charCountLeft}
                     </CharCount>
-                    <button className="largeButton" type="submit">Meow</button>
+                    <SubmitButton className="largeButton" type="submit" 
+                        disabled={(charCountLeft < 0)} onClick={sendTweet}>Meow</SubmitButton>
                 </ButtonArea>
             </Main>
         </Wrapper>
@@ -83,6 +111,10 @@ const ButtonArea = styled.div`
     
     /* button has to have a gray filter after submit */
     `;
+
+const SubmitButton = styled.button`
+    background-color: ${props => (props.disabled ? `${COLORS.outlineColor}` : `${COLORS.primary}`)}
+`
 
 const CharCount = styled.span`
     margin: 0 20px;

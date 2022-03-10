@@ -12,41 +12,10 @@ import Profile from "./Profile";
 import { CurrentUserContext } from "./CurrentUserContext";
 
 
-
-
-const initialState = {
-  homefeedTweetIds: null,
-  homefeedTweetsById: null, 
-  status: "loading", 
-  error: null, 
-}
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case ("receive-homefeed-data-from-server"):
-      return {
-        ...state,
-        homefeedTweetIds: action.tweetIds,
-        homefeedTweetsById: action.tweetsById, 
-        status: "idle",
-      }
-
-    case ("failure-loading-homefeed-data-from-server"):
-      return {
-        ...initialState,
-        status: "failed",
-        error: action.error,
-      }
-    }
-}
-
-
 const App = () => {
   
   const { state: { status }, 
     actions: {receiveProfileDataFromServer, failureLoadingProfileDataFromServer} } = useContext(CurrentUserContext);
-  
-  const [ feedState, dispatch ] = useReducer(reducer, initialState);
 
     //Fetch the user data from the API (/me/profile)
     useEffect(() => {
@@ -60,37 +29,15 @@ const App = () => {
       })
     }, [])
 
-    //Fetch homefeed data from the API
-    useEffect(() => {
-      fetch("/api/me/home-feed")
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("data", data);
-          dispatch({
-            type: "receive-homefeed-data-from-server",
-            ...data,
-          })
-        })
-        .catch((err) => {
-          console.log("Error:", err);
-          dispatch({
-            type: "failure-loading-homefeed-data-from-server",
-            error: err,
-          });
-        })
-      }, [])
-
   return (
     <Wrapper>
-      {(status === "loading" && 
-          <h3>Page is loading!</h3>)}
-      {(status === "idle" && 
+      {(status === "idle" &&
       <Router>
-      <GlobalStyles />
-      <Sidebar />
+        <GlobalStyles />
+        <Sidebar />
         <Switch>
           <Route exact path="/">
-            <Homefeed status={feedState.status} tweetIds={feedState.homefeedTweetIds} tweetsById={feedState.homefeedTweetsById}/>
+            <Homefeed />
           </Route>
           <Route exact path="/notifications">
             <Notifications />

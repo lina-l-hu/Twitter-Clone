@@ -17,7 +17,6 @@ const SmallTweet = ( { tweetId, isRetweetedPost, retweeterHandle, retweeterAutho
     function handleClick() {
         history.push(`/tweet/${tweetId}`);
     }
-    console.log("tweetId in smalltweet", tweetId)
 
     return (
         <Wrapper>

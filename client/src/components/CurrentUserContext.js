@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useState, useReducer } from "react";
 
 export const CurrentUserContext = createContext(null);
 
@@ -30,6 +30,9 @@ const reducer = (state, action) => {
 
 export const CurrentUserProvider = ({children}) => {
 
+    //state that updates every time the current user tweets
+    const [ newTweetCount, setNewTweetCount ] = useState(0);
+
     const [state, dispatch] = useReducer(reducer, initialState);
     
  
@@ -50,7 +53,8 @@ export const CurrentUserProvider = ({children}) => {
         <CurrentUserContext.Provider 
         value={{ state, 
                  actions: {receiveProfileDataFromServer, 
-                 failureLoadingProfileDataFromServer}}}>
+                 failureLoadingProfileDataFromServer}, 
+                 newTweetCount, setNewTweetCount}}>
             {children}
         </CurrentUserContext.Provider>
     );

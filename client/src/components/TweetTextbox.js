@@ -3,6 +3,7 @@ import Avatar from "./Avatar";
 import styled, { keyframes, css } from "styled-components";
 import { FiLoader } from "react-icons/fi";
 import { CurrentUserContext } from "./CurrentUserContext";
+import { HomefeedContext } from "./HomefeedContext";
 import { COLORS, PADDING } from "../constants";
 
 
@@ -11,8 +12,8 @@ const TweetTextbox = () => {
     
     const MAXNUMCHARS = 280;
     const textAreaRef = useRef();
-    const { state: { currentUser: { avatarSrc } }, newTweetCount, setNewTweetCount } = useContext(CurrentUserContext);
-    
+    const { state: { currentUser: { avatarSrc } } } = useContext(CurrentUserContext);
+    const {newTweetCount, setNewTweetCount} = useContext(HomefeedContext);
     const initialState = {
         tweetText: "",
         charCountLeft: MAXNUMCHARS,

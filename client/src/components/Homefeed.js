@@ -5,64 +5,65 @@ import SmallTweet from './SmallTweet';
 import TweetTextbox from './TweetTextbox';
 import PageHeader from './PageHeader';
 import { CurrentUserContext } from './CurrentUserContext';
+import { HomefeedContext } from './HomefeedContext';
 import ErrorHandler from './ErrorHandler';
 import { COLORS } from '../constants';
 
 
-const initialState = {
-  tweetIds: null,
-  tweetsById: null, 
-  status: "loading", 
-  error: null, 
-}
+// const initialState = {
+//   tweetIds: null,
+//   tweetsById: null, 
+//   status: "loading", 
+//   error: null, 
+// }
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case ("receive-homefeed-data-from-server"):
-      return {
-        ...state,
-        tweetIds: action.tweetIds,
-        tweetsById: action.tweetsById, 
-        status: "idle",
-      }
+// const reducer = (state, action) => {
+//   switch (action.type) {
+//     case ("receive-homefeed-data-from-server"):
+//       return {
+//         ...state,
+//         tweetIds: action.tweetIds,
+//         tweetsById: action.tweetsById, 
+//         status: "idle",
+//       }
 
-    case ("failure-loading-homefeed-data-from-server"):
-      return {
-        ...initialState,
-        status: "failed",
-        error: action.error,
-      }
-    }
-}
+//     case ("failure-loading-homefeed-data-from-server"):
+//       return {
+//         ...initialState,
+//         status: "failed",
+//         error: action.error,
+//       }
+//     }
+// }
 
 const HomeFeed = () => {
 
-  const { newTweetCount } = useContext(CurrentUserContext);
+  const { newTweetCount, errorState, state: { tweetIds, tweetsById, status } } = useContext(HomefeedContext);
 
-  const [ feedState, dispatch ] = useReducer(reducer, initialState);
+  // const [ feedState, dispatch ] = useReducer(reducer, initialState);
 
-  const [errorState, setErrorState] = useState(false);
+  // const [errorState, setErrorState] = useState(false);
 
-    //Fetch homefeed data from the API
-    useEffect(() => {
-      fetch("/api/me/home-feed")
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("data", data);
-          dispatch({
-            type: "receive-homefeed-data-from-server",
-            ...data,
-          })
-        })
-        .catch((err) => {
-          console.log("Error:", err);
-          setErrorState(true);
-          dispatch({
-            type: "failure-loading-homefeed-data-from-server",
-            error: err,
-          });
-        })
-      }, [newTweetCount])
+    // //Fetch homefeed data from the API
+    // useEffect(() => {
+    //   fetch("/api/me/home-feed")
+    //     .then((res) => res.json())
+    //     .then((data) => {
+    //       console.log("data", data);
+    //       dispatch({
+    //         type: "receive-homefeed-data-from-server",
+    //         ...data,
+    //       })
+    //     })
+    //     .catch((err) => {
+    //       console.log("Error:", err);
+    //       setErrorState(true);
+    //       dispatch({
+    //         type: "failure-loading-homefeed-data-from-server",
+    //         error: err,
+    //       });
+    //     })
+    //   }, [newTweetCount])
     
       if (errorState) {
         return <ErrorHandler />
@@ -73,15 +74,15 @@ const HomeFeed = () => {
         <PageHeader>Home</PageHeader>
         <TweetTextbox /> 
 
-        {(feedState.status === "loading" && 
+        {(status === "loading" && 
             <LoadingDiv>
               <FiLoader className="loadingIcon"/>
             </LoadingDiv>)}
     
-        {(feedState.status === "idle" &&
+        {(status === "idle" &&
           <>
-          {feedState.tweetIds.map((id) => {
-            let tweet = feedState.tweetsById[id];
+          {tweetIds.map((id) => {
+            let tweet = tweetsById[id];
             if (Object.keys(tweet).includes("retweetFrom")) {
               return (
                 <SmallTweet key={id} tweetId={tweet.id} isRetweetedPost={true} retweeterHandle={tweet.author.handle} 

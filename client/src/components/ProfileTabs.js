@@ -1,18 +1,27 @@
 import styled from "styled-components";
+import { useEffect, useRef } from "react";
 import {COLORS} from "../constants";
 
-const ProfileTabs = () => {
+const ProfileTabs = ({selectedTab, setSelectedTab}) => {
+    const tweetsButtonRef = useRef();
+    const likesButtonRef = useRef();
+
+    const handleTweetsClick = () => {
+        setSelectedTab("Tweets");
+    }
+
+    const handleLikesClick = () => {
+        setSelectedTab("Likes");
+    }
+
     return (
         <Wrapper>
-            <button>Tweets</button>
+            <button ref={tweetsButtonRef} onClick={handleTweetsClick}>Tweets</button>
             <button>Media</button>
-            <button>Likes</button>
+            <button ref={likesButtonRef} onClick={handleLikesClick}>Likes</button>
         </Wrapper>
     )
 }
-
-
-//if we click button, bottom outline highlights purple
 
 const Wrapper = styled.div`
     display: flex;

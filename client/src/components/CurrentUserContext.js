@@ -31,7 +31,7 @@ const reducer = (state, action) => {
 export const CurrentUserProvider = ({children}) => {
 
     //state that updates every time the current user tweets
-    const [ newTweetCount, setNewTweetCount ] = useState(0);
+    // const [ newTweetCount, setNewTweetCount ] = useState(0);
 
     const [state, dispatch] = useReducer(reducer, initialState);
     
@@ -54,7 +54,7 @@ export const CurrentUserProvider = ({children}) => {
         value={{ state, 
                  actions: {receiveProfileDataFromServer, 
                  failureLoadingProfileDataFromServer}, 
-                 newTweetCount, setNewTweetCount}}>
+                 }}>
             {children}
         </CurrentUserContext.Provider>
     );

@@ -7,6 +7,7 @@ import { PADDING, COLORS } from "../constants";
 import { CurrentUserContext } from "./CurrentUserContext";
 import ProfileTabs from "./ProfileTabs";
 import ProfileFeed from "./ProfileFeed";
+import LikeFeed from "./LikeFeed";
 import ErrorHandler from "./ErrorHandler";
 import FollowButton from "./FollowButton";
 
@@ -73,6 +74,8 @@ const Profile = () => {
   const [userFeed, feedDispatch] = useReducer(feedReducer, initialFeedState);
   
   const [errorState, setErrorState] = useState(false);
+
+  const [ selectedTab, setSelectedTab ] = useState("Tweets");
 
   //fetch profile data for the user
   useEffect(() => {
@@ -155,12 +158,15 @@ const Profile = () => {
             <span><span>{userProfile.user.numFollowers}</span> Followers</span>
           </div>
           </HeaderInner>
-          <ProfileTabs />
+          <ProfileTabs selectedTab={selectedTab} setSelectedTab={setSelectedTab}/>
         </Header>
       )}
-      
+      {(selectedTab === "Tweets" && 
         <ProfileFeed status={userFeed.status} tweetIds={userFeed.userFeedTweetIds} tweetsById={userFeed.userFeedTweetsById}/>
-      
+      )}
+       {(selectedTab === "Likes" && 
+        <LikeFeed status={userFeed.status} tweetIds={userFeed.userFeedTweetIds} tweetsById={userFeed.userFeedTweetsById}/>
+      )}
       </Wrapper>
     )
   };

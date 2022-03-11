@@ -11,7 +11,6 @@ import CustomTippy from "./CustomTippy";
 const SmallTweet = ( { tweetId, isRetweetedPost, retweeterHandle, retweeterAuthor, avatarSrc,
     authorHandle, authorName, status, date, mediaSrc, numLikes, numRetweets, isLiked, isRetweeted, bio, numFollowers, numFollowing } ) => {
 
-        console.log("in small tweet", bio, numFollowers, numFollowing)
     const formattedDate = moment(date).format("MMM Do");
 
     let history = useHistory();

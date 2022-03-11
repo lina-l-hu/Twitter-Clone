@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Heart from "./Heart";
 import PoppingCircle from "./PoppingCircle";
 
-
+//like button with animation
 const LikeButton = ({ isLiked }) => {
   
   const size = 30;

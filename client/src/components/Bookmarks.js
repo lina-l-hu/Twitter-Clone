@@ -1,5 +1,6 @@
-import PageHeader from "./PageHeader";
+import PageHeader from "../components/GeneralComponents/PageHeader"
 
+//skeleton page 
 const Bookmarks = () => {
     return <PageHeader>Bookmarks</PageHeader>
   };

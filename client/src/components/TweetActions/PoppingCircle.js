@@ -1,5 +1,6 @@
 import styled, { keyframes } from "styled-components";
 
+//animation component for the like button
 const PoppingCircle = ({size, color}) => {
     const width = `40px`;
     const height = `${size}px`;

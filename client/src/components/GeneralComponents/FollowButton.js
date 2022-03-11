@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { useReducer } from "react";
-import { COLORS } from "../constants";
+import { COLORS } from "../../constants";
 
-//pass in from profile!!!
+//follow button on profile page and followers page
+//clicking it will toggle follow/unfollow
 const FollowButton = ({handle, isBeingFollowedByYou, numFollowing}) => {
     
     const initialFollowState = {
@@ -35,9 +36,12 @@ const FollowButton = ({handle, isBeingFollowedByYou, numFollowing}) => {
         }
       }
 
+      //variables to keep track of follow state and put to server calls
       const [followState, followDispatch] = useReducer(followReducer, initialFollowState);
       
+      //onClick function to toggle
       const handleToggleFollow = () => {
+        //unfollowing user
         if (followState.isFollowedByUser === true) {
           fetch(`/api/${handle}/unfollow`, {
             method: "PUT",
@@ -49,7 +53,6 @@ const FollowButton = ({handle, isBeingFollowedByYou, numFollowing}) => {
             })
             .then(res => res.json())
             .then(data => {
-              console.log("unfollowed")
               if (data.success === true) {
                 followDispatch ({
                   type: "unfollowed", 
@@ -57,13 +60,13 @@ const FollowButton = ({handle, isBeingFollowedByYou, numFollowing}) => {
               }
             })
             .catch((err) => {
-              console.log("error for unfollowing tweet", err);
               followDispatch ({
                 type: "failed",
                 error: err,
               })
             })
         }
+        //following user
         else {
           fetch(`/api/${handle}/follow`, {
             method: "PUT",
@@ -75,7 +78,6 @@ const FollowButton = ({handle, isBeingFollowedByYou, numFollowing}) => {
             })
             .then(res => res.json())
             .then(data => {
-              console.log("followed")
               if (data.success === true) {
                 followDispatch ({
                   type: "followed", 
@@ -83,7 +85,6 @@ const FollowButton = ({handle, isBeingFollowedByYou, numFollowing}) => {
               }
             })
             .catch((err) => {
-              console.log("error for following", err);
               followDispatch ({
                 type: "failed",
                 error: err,
@@ -91,6 +92,7 @@ const FollowButton = ({handle, isBeingFollowedByYou, numFollowing}) => {
             })
         }
     }
+    
     return <Button className="largeButton" followed={followState.isFollowedByUser}
     onClick={handleToggleFollow}>{(followState.isFollowedByUser) ? "Following" : "Follow"}</Button>
 }
@@ -101,6 +103,10 @@ const Button = styled.button`
     background-color: ${props => props.followed ? `${COLORS.primary}` : "white"};
     color: ${props => props.followed ? "white" : `${COLORS.primary}`};
     width: 120px;
+    
+    &:hover {
+      cursor: pointer;
+    }
 `
 
 export default FollowButton;

@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import { COLORS } from "../constants";
+import { COLORS } from "../../constants";
 
+//Page header 
 const PageHeader = ({children}) => {
     return (
         <PageTitle><h1>{children}</h1></PageTitle>
@@ -10,7 +11,8 @@ const PageHeader = ({children}) => {
 const PageTitle = styled.div`
     padding: 10px;
     padding-left: 20px;
-    border: 1px solid ${COLORS.outlineColor};
+    border-top: 1px solid ${COLORS.outlineColor};
+    border-bottom: 1px solid ${COLORS.outlineColor};
     width: 100%;
 `
 

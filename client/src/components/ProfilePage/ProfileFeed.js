@@ -1,9 +1,7 @@
 import styled from "styled-components";
-import SmallTweet from "./SmallTweet";
+import SmallTweet from "../GeneralComponents/SmallTweet";
 
-
-
-
+//this is the tweet feed that renders on the Homefeed under the tweet box
 const ProfileFeed = ({status, tweetIds, tweetsById}) => {
     
     return (
@@ -49,6 +47,10 @@ const ProfileFeed = ({status, tweetIds, tweetsById}) => {
 }
 
 const Wrapper = styled.div`
+    div:first-of-type {
+        margin-top: -5px;
+        padding-top: 8px;
+    }
 `
 export default ProfileFeed;
 

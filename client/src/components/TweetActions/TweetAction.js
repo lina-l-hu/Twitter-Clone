@@ -1,11 +1,10 @@
 import {useState} from "react";
 import styled from 'styled-components';
-
 import UnstyledButton from './UnstyledButton';
 
+//from the animation workshop -- each action button shows a color shadow on hover
 const Action = ({ color, size, children, onClick }) => {
   const [isHovered, setIsHovered] = useState(false);
-
 
   return (
     <Wrapper

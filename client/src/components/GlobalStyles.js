@@ -51,6 +51,14 @@ const GlobalStyles = createGlobalStyle`
     font-size: 28px;
   }
 
+  a {
+    cursor: pointer;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
   .largeButton {
     background-color: ${COLORS.primary};
         border-radius: 40px;

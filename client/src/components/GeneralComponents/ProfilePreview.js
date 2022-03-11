@@ -1,12 +1,14 @@
 import styled from "styled-components";
-import { COLORS, PADDING } from "../constants";
+import { COLORS } from "../../constants";
 import Avatar from "./Avatar";
 
+//preview of profile to be rendered inside of custom tippy component
 const ProfilePreview = ({avatarSrc, authorName, authorHandle,
     bio, numFollowers, numFollowing}) => {
 
     return (
         <Wrapper>
+
             <div>
                 <Avatar imgSrc={avatarSrc}/>
                 <p className="author">{authorName}</p>
@@ -23,7 +25,6 @@ const ProfilePreview = ({avatarSrc, authorName, authorHandle,
             </div>
 
         </Wrapper>
-
     )
 
 }

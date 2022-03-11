@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { useContext } from "react";
-import SmallTweet from "./SmallTweet";
-import { HomefeedContext } from "./HomefeedContext";
+import SmallTweet from "../GeneralComponents/SmallTweet";
+import { HomefeedContext } from "../HomefeedContext";
 
-
+//this is the like tab on the profile page that displays all the posts the user has liked
 const LikeFeed = () => {
     
     const { state: {status, tweetIds, tweetsById} } = useContext(HomefeedContext);
@@ -18,17 +18,17 @@ const LikeFeed = () => {
                 let tweet = tweetsById[id];
                 if (tweet.isLiked) {
                     if (Object.keys(tweet).includes("retweetFrom")) {
-                    return (
-                        <SmallTweet key={id} tweetId={tweet.id} isRetweetedPost={true} retweeterHandle={tweet.author.handle} 
-                        retweeterAuthor={tweet.author.displayName} avatarSrc={tweet.retweetFrom.avatarSrc}
-                        authorHandle={tweet.retweetFrom.handle} authorName={tweet.retweetFrom.displayName}
-                        status={tweet.status} date={tweet.timestamp} 
-                        mediaSrc={((tweet.media).length !== 0) ? (tweet.media[0]).url: undefined}
-                        numLikes={tweet.numLikes} numRetweets={tweet.numRetweets}
-                        isLiked={tweet.isLiked} isRetweeted={tweet.isRetweeted}
-                        bio={tweet.retweetFrom.bio} numFollowers={tweet.retweetFrom.numFollowers} numFollowing={tweet.retweetFrom.numFollowing}
-                        />
-                    )
+                        return (
+                            <SmallTweet key={id} tweetId={tweet.id} isRetweetedPost={true} retweeterHandle={tweet.author.handle} 
+                            retweeterAuthor={tweet.author.displayName} avatarSrc={tweet.retweetFrom.avatarSrc}
+                            authorHandle={tweet.retweetFrom.handle} authorName={tweet.retweetFrom.displayName}
+                            status={tweet.status} date={tweet.timestamp} 
+                            mediaSrc={((tweet.media).length !== 0) ? (tweet.media[0]).url: undefined}
+                            numLikes={tweet.numLikes} numRetweets={tweet.numRetweets}
+                            isLiked={tweet.isLiked} isRetweeted={tweet.isRetweeted}
+                            bio={tweet.retweetFrom.bio} numFollowers={tweet.retweetFrom.numFollowers} numFollowing={tweet.retweetFrom.numFollowing}
+                            />
+                        )
                     }
                     else {
                         return (

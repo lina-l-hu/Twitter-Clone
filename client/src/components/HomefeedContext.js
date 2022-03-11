@@ -1,5 +1,6 @@
 import React, { createContext, useState, useReducer, useEffect } from "react";
 
+//context that holds the tweet data for the homefeed
 export const HomefeedContext = createContext(null);
 
 const initialState = {
@@ -34,7 +35,8 @@ export const HomefeedProvider = ({children}) => {
 
     const [errorState, setErrorState] = useState(false);
 
-    //state that updates every time the current user tweets
+    //state that updates every time the current user tweets -- used to trigger 
+    //rerender of homeffed
     const [ newTweetCount, setNewTweetCount ] = useState(0);
     
     //Fetch homefeed data from the API
@@ -42,14 +44,12 @@ export const HomefeedProvider = ({children}) => {
         fetch("/api/me/home-feed")
           .then((res) => res.json())
           .then((data) => {
-            console.log("data", data);
             dispatch({
               type: "receive-homefeed-data-from-server",
               ...data,
             })
           })
           .catch((err) => {
-            console.log("Error:", err);
             setErrorState(true);
             dispatch({
               type: "failure-loading-homefeed-data-from-server",

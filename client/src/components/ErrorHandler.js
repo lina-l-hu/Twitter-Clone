@@ -1,9 +1,7 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import { ReactComponent as Bomb} from '../assets/bomb.svg';
 
-//support link to add
-
+//error page
 const ErrorHandler = ({error}) => {
     return (
         <Wrapper>
@@ -14,8 +12,6 @@ const ErrorHandler = ({error}) => {
     )
 }
 
-
-
 const Wrapper = styled.div`
     height: 100vh;
     display: flex;
@@ -23,6 +19,7 @@ const Wrapper = styled.div`
     align-items: center;
     justify-content: center;
     font-family: sans-serif;
+    margin-left: 15%;
 
     * {
         margin: 20px 0;
@@ -32,4 +29,5 @@ const Wrapper = styled.div`
         font-size: 16px;
     }
 `
+
 export default ErrorHandler;

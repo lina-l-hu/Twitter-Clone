@@ -1,77 +1,27 @@
-import { useEffect, useState, useReducer, useContext } from 'react';
+import { useContext } from 'react';
 import styled, { keyframes } from "styled-components";
 import { FiLoader } from "react-icons/fi";
-import SmallTweet from './SmallTweet';
-import TweetTextbox from './TweetTextbox';
-import PageHeader from './PageHeader';
-import { CurrentUserContext } from './CurrentUserContext';
+import SmallTweet from './GeneralComponents/SmallTweet';
+import TweetTextbox from './GeneralComponents/TweetTextbox';
+import PageHeader from './GeneralComponents/PageHeader';
 import { HomefeedContext } from './HomefeedContext';
 import ErrorHandler from './ErrorHandler';
-import { COLORS } from '../constants';
 
-
-// const initialState = {
-//   tweetIds: null,
-//   tweetsById: null, 
-//   status: "loading", 
-//   error: null, 
-// }
-
-// const reducer = (state, action) => {
-//   switch (action.type) {
-//     case ("receive-homefeed-data-from-server"):
-//       return {
-//         ...state,
-//         tweetIds: action.tweetIds,
-//         tweetsById: action.tweetsById, 
-//         status: "idle",
-//       }
-
-//     case ("failure-loading-homefeed-data-from-server"):
-//       return {
-//         ...initialState,
-//         status: "failed",
-//         error: action.error,
-//       }
-//     }
-// }
-
+//homepage with tweetfeed of users the current user follows
 const HomeFeed = () => {
 
   const { newTweetCount, errorState, state: { tweetIds, tweetsById, status } } = useContext(HomefeedContext);
 
-  // const [ feedState, dispatch ] = useReducer(reducer, initialState);
+  //catch errors during the homefeed data load from server (located in context file)
+  if (errorState) {
+    return <ErrorHandler />
+  }
 
-  // const [errorState, setErrorState] = useState(false);
-
-    // //Fetch homefeed data from the API
-    // useEffect(() => {
-    //   fetch("/api/me/home-feed")
-    //     .then((res) => res.json())
-    //     .then((data) => {
-    //       console.log("data", data);
-    //       dispatch({
-    //         type: "receive-homefeed-data-from-server",
-    //         ...data,
-    //       })
-    //     })
-    //     .catch((err) => {
-    //       console.log("Error:", err);
-    //       setErrorState(true);
-    //       dispatch({
-    //         type: "failure-loading-homefeed-data-from-server",
-    //         error: err,
-    //       });
-    //     })
-    //   }, [newTweetCount])
-    
-      if (errorState) {
-        return <ErrorHandler />
-      }
-
-    return (
+  return (
       <Wrapper>
+
         <PageHeader>Home</PageHeader>
+
         <TweetTextbox /> 
 
         {(status === "loading" && 
@@ -112,26 +62,23 @@ const HomeFeed = () => {
           })
         }         
         </>  
-        )}
-        
+      )}  
       </Wrapper>
     );
 };
 
 const Wrapper = styled.div`
-  /* display: flex;
-  flex-direction: column; */
   width: 100%;
   `
 
 const spinning = keyframes`
-from {
-  transform: rotate(0deg);
-}
-to {
-  transform: rotate(360deg);
-}
-`;
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`
 
 const LoadingDiv = styled.div`
   display: flex;
@@ -146,10 +93,4 @@ const LoadingDiv = styled.div`
   }
 `
 
-// const PageTitle = styled.div`
-//     padding: 10px;
-//     padding-left: 20px;
-//     border: 1px solid ${COLORS.outlineColor};
-//     width: 100%;
-// `
 export default HomeFeed;

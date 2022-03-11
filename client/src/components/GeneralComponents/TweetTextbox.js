@@ -2,23 +2,23 @@ import { useContext, useRef, useEffect, useState, useReducer } from "react";
 import Avatar from "./Avatar";
 import styled, { keyframes, css } from "styled-components";
 import { FiLoader } from "react-icons/fi";
-import { CurrentUserContext } from "./CurrentUserContext";
-import { HomefeedContext } from "./HomefeedContext";
-import { COLORS, PADDING } from "../constants";
+import { CurrentUserContext } from "../CurrentUserContext";
+import { HomefeedContext } from "../HomefeedContext";
+import { COLORS, PADDING } from "../../constants";
 
-
-
+//textarea to enter a new tweet on homepage and tippy in sidebar
 const TweetTextbox = () => {
     
-    const MAXNUMCHARS = 280;
-    const textAreaRef = useRef();
     const { state: { currentUser: { avatarSrc } } } = useContext(CurrentUserContext);
-    const {newTweetCount, setNewTweetCount} = useContext(HomefeedContext);
+    const { state: { status }, setNewTweetCount} = useContext(HomefeedContext);
+    
+    const MAXNUMCHARS = 280;
+
+    const textAreaRef = useRef();
+
     const initialState = {
         tweetText: "",
         charCountLeft: MAXNUMCHARS,
-        // isSending: "idle",
-        // postSuccess: false,
         isSending: false,
         postSuccess: true,
     
@@ -67,49 +67,44 @@ const TweetTextbox = () => {
         }
     }
 
+    //reducer to track state of tweet content and posting to server
     const [postTweet, dispatch] = useReducer(reducer, initialState);
 
-   
-
-    
-    // const [tweetInput, setTweetInput] = useState("");
-    
-    // const [charCountLeft, setCharCountLeft] = useState(MAXNUMCHARS);
-
-
-    // const [sendState, setSendState ] = useState(false);
-
-    //error state needed to set a message to user to try again -- maybe should put everything in reducer
-
-    //on keydown event listener
+    //add on keydown event listener to text area ref to get updated value and length of the tweet
     useEffect(() => {
         const updateInputtedText = () => {
             dispatch ({
                 type: "update-tweet-text"
             })
-            // setTweetInput(textAreaRef.current.value);
-            // setCharCountLeft(MAXNUMCHARS - textAreaRef.current.value.length);
         }
 
-        textAreaRef.current.addEventListener("keyup", updateInputtedText); 
-
-        return () => {
-            textAreaRef.current.removeEventListener("keyup", updateInputtedText); 
+        //if tweet 
+        if (status === "idle") {
+            textAreaRef.current.addEventListener("keyup", updateInputtedText); 
         }
+        //for some reason, there is an error every so often where react tries to unmount this though
+        //it is not mounted, and I can't figure out why so I've taken out the return for now even
+        //though I know this is good practice to unmount listeners
+        // return () => {
+        //     if (status === "idle") {
+        //      textAreaRef.current.removeEventListener("keyup", updateInputtedText); 
+        //    }
+        // }
     }, [])
-
-
+  
+    //onClick function for Tweet submit button
     const sendTweet = () => {
 
         const data = { status: postTweet.tweetText }
-        console.log(data);
         
+        //if the tweet is 280 chars or less and not empty
         if (postTweet.charCountLeft >=0 && postTweet.charCountLeft !== MAXNUMCHARS) {
+            //mark state as sending
             dispatch ({
                 type: "sending-tweet-to-server",
             })
-            
-            // setSendState(true);
+
+            //post to server
             fetch("/api/tweet", {
                 method: "POST",
                 headers: {
@@ -121,64 +116,58 @@ const TweetTextbox = () => {
                 })
                 .then(res => res.json())
                 .then(data => {
+                    //this state variable is used to trigger the rerender of the homefeed
                     setNewTweetCount((newTweetCount) => (newTweetCount+1));
+                    //clear text area input
                     textAreaRef.current.value = "";
+                    //these two dispatches probably look silly, but I anticipate at some point
+                    //it may be useful to separate these functions
                     dispatch ({
                         type: "successfully-posted-tweet-to-server",
                     })
-                    // setSendState(false);
-                    // console.log(data);
                     dispatch ({
                         type: "reset-after-success"
                     })
-                    // setTweetInput("");
-                    // setCharCountLeft(MAXNUMCHARS);
 
                 })
                 .catch((err) => {
-                    console.log("error for post tweet", err);
-                    // setSendState(false);
                     dispatch ({
                         type: "tweet-post-to-server-failed"
                     })
                     dispatch ({
                         type: "reset-after-fail"
                     })
-
                 })
-
-                // if (postTweet.status === "posted") {
-                //     dispatch ({
-                //         type: "reset-after-success"
-                //     })
-                // }
-                // else {
-                //     dispatch ({
-                //         type: "reset-after-fail"
-                //     })
-                // }
         }
     }
 
     return (
         <Wrapper>
+
             <Avatar imgSrc={avatarSrc}/>
+            
             <Main>
+                
                 <TweetBox ref={textAreaRef} id="newTweet" name="newTweet" rows="5" placeholder="What's happening?">
                 </TweetBox>
+                
                 <ButtonArea>
                     <ErrorMsg>
                         {(postTweet.postSuccess) ? "" : "An error occurred during post -- please try again!"}
-                        </ErrorMsg>
+                    </ErrorMsg>
+                    
                     <CharCount almostCharLimit={(postTweet.charCountLeft <= 55 && postTweet.charCountLeft >= 0)}
                                 overCharLimit={(postTweet.charCountLeft < 0)}>
                         {postTweet.charCountLeft}
                     </CharCount>
+                    
                     <SubmitButton className="largeButton" type="submit" 
                         disabled={(postTweet.charCountLeft < 0) || (postTweet.isSending)} onClick={sendTweet}
                         >{(postTweet.isSending) ? <FiLoader className="icon"/> : "Meow"}</SubmitButton>
                 </ButtonArea>
+            
             </Main>
+        
         </Wrapper>
     )
 }
@@ -212,7 +201,7 @@ const ButtonArea = styled.div`
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    `;
+`;
 
 const spinning = keyframes`
     from {
@@ -228,6 +217,7 @@ const SubmitButton = styled.button`
     width: 90px;
 
     .icon {
+        align-self: center;
         animation: ${spinning} 500ms infinite;
         animation-timing-function: linear;
     }

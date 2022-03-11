@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useEffect, useContext, useState } from 'react';
-import {ErrorBoundary} from 'react-error-boundary';
 import styled, { keyframes } from "styled-components";
 import { FiLoader } from "react-icons/fi";
 import GlobalStyles from "./GlobalStyles";
@@ -13,13 +12,15 @@ import TweetDetails from "./TweetDetails";
 import Profile from "./Profile";
 import ErrorHandler from "./ErrorHandler";
 import { CurrentUserContext } from "./CurrentUserContext";
+import FollowFeed from "./FollowFeed"
 
 
 const App = () => {
   
-  const { state: { status, error}, 
+  const { state: { status }, 
     actions: {receiveProfileDataFromServer, failureLoadingProfileDataFromServer} } = useContext(CurrentUserContext);
 
+  //state to indicate whether the profile data fetch from server is successful
   const [errorState, setErrorState] = useState(false);
 
     //Fetch the user data from the API (/me/profile)
@@ -35,41 +36,55 @@ const App = () => {
       })
     }, [])
 
-    // if (errorState) {
-    //   return <ErrorHandler />
-    // }
-
   return (
     <Wrapper>
 
       <Router>
+
         <GlobalStyles />
+
         <Sidebar />
-        {(errorState) && <ErrorHandler/>}
-      {(status === "loading" && 
-            <LoadingDiv>
-              <FiLoader className="loadingIcon"/>
-            </LoadingDiv>)}
-      {(status === "idle" &&
+
+        {(errorState) && 
+        <ErrorHandler/>}
+
+        {(status === "loading" && 
+          <LoadingDiv>
+            <FiLoader className="loadingIcon"/>
+          </LoadingDiv>)}
+
+       {(status === "idle" &&
         <Switch>
+
           <Route exact path="/">
             <Homefeed />
           </Route>
+
           <Route exact path="/notifications">
             <Notifications />
           </Route>
+
           <Route exact path="/bookmarks">
             <Bookmarks />
           </Route>
+
           <Route exact path="/tweet/:tweetId">
             <TweetDetails />
           </Route>
+
+          <Route exact path="/:profileId/followers">
+            <FollowFeed />
+          </Route>
+
           <Route exact path="/:profileId">
             <Profile />
           </Route>
+          
         </Switch>
       )}
+
       </Router>
+
     </Wrapper>
   )
 };

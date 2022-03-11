@@ -1,5 +1,6 @@
-import { createContext, useState, useReducer } from "react";
+import { createContext, useReducer } from "react";
 
+//context to keep track of current user data loaded in App
 export const CurrentUserContext = createContext(null);
 
 const initialState = {
@@ -30,12 +31,8 @@ const reducer = (state, action) => {
 
 export const CurrentUserProvider = ({children}) => {
 
-    //state that updates every time the current user tweets
-    // const [ newTweetCount, setNewTweetCount ] = useState(0);
-
     const [state, dispatch] = useReducer(reducer, initialState);
     
- 
     const receiveProfileDataFromServer = (data) => {
         dispatch({
             type: "receive-profile-data-from-server", 

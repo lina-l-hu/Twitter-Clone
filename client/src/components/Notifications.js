@@ -1,5 +1,6 @@
-import PageHeader from "./PageHeader";
+import PageHeader from "./GeneralComponents/PageHeader";
 
+//skeleton page 
 const Notifications = () => {
     return <PageHeader>Notifications</PageHeader>;
   };

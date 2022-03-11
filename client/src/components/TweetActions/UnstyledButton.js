@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+//from animation workshop
 export default styled.button`
   display: block;
   margin: 0;

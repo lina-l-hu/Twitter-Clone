@@ -6,28 +6,24 @@ import { FiHome, FiUser, FiBell, FiBookmark } from "react-icons/fi";
 import { COLORS } from "../constants";
 import { ReactComponent as CritterLogo } from '../assets/logo.svg';
 import { CurrentUserContext } from "./CurrentUserContext";
-import CustomTippy from "./CustomTippy";
-import TweetTextbox from "./TweetTextbox";
+import CustomTippy from "./GeneralComponents/CustomTippy";
+import TweetTextbox from "./GeneralComponents/TweetTextbox";
 
-
-
+//navigation sidebar
 const Sidebar = () => {
 
     const { state: { currentUser, status } } = useContext(CurrentUserContext);
 
-    // let currentUserHandle = null;
-
-    // if (status !== "loading") {
-    //     currentUserHandle = currentUser.handle;
-    // }
-
     return (
         <Wrapper>
+
             <CritterLogo style={{ width: "50px", marginLeft: "-10px", marginBottom: "-10px"}} />
+            
             <NavDiv>
                 <FiHome className="icon"/>
                 <NavigationLink to="/" activeClassName="active" exact>Home</NavigationLink>
             </NavDiv>
+            
             <NavDiv>
                 <FiUser className="icon"/>
                 {(status === "idle") ? 
@@ -35,22 +31,26 @@ const Sidebar = () => {
                 : (<h3>Profile</h3>)
                 }
             </NavDiv>
+            
             <NavDiv>
                 <FiBell className="icon"/>
                 <NavigationLink to="/notifications" activeClassName="active" exact>Notifications</NavigationLink>
             </NavDiv>
+            
             <NavDiv>
                 <FiBookmark className="icon"/>
                 <NavigationLink to="/bookmarks" activeClassName="active" exact>Bookmarks</NavigationLink>
             </NavDiv>
+            
             <NavDiv>
                 {(status === "idle") ? (
-                    <CustomTippy content={<TweetTextbox/>} >
+                    <CustomTippy tabindex="-1" content={<TweetTextbox/>} >
                         <TweetButton className="largeButton">Meow</TweetButton>
                     </CustomTippy>
                 ) : (<TweetButton className="largeButton">Meow</TweetButton>)
                 }
             </NavDiv>
+
         </Wrapper>
     )
 };
@@ -58,9 +58,9 @@ const Sidebar = () => {
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 10px;
-    margin: 20px;
-    
+    padding: 30px;
+    border-right: 1px solid ${COLORS.outlineColor};
+    height: 100vh;
 `
 const Logo = styled.img`
     margin: 20px 0;
@@ -84,7 +84,6 @@ const NavDiv = styled.div`
         text-decoration: none;
     }
 `
-
 
 const NavigationLink = styled(NavLink)`
     font-size: 20px;

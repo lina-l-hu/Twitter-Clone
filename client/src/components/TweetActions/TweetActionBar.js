@@ -1,11 +1,13 @@
 import styled from "styled-components";
 import { useReducer } from "react";
-import { FiMessageCircle, FiRepeat, FiHeart, FiUpload } from "react-icons/fi";
-//import each button with functionality
+import { FiMessageCircle, FiRepeat, FiUpload } from "react-icons/fi";
 import LikeButton from "./LikeButton";
 import TweetAction from "./TweetAction";
 
+//tweet actions below each tweet post -- the like button works fully (updates the server)
+//and the retweet button value is only held in state
 const TweetActionBar = ( {tweetId, isLiked, isRetweeted, numLikes, numRetweets}) => {
+  
   const HIGHLIGHTSIZE = 30;
   
   const initialLikeState = {
@@ -14,7 +16,6 @@ const TweetActionBar = ( {tweetId, isLiked, isRetweeted, numLikes, numRetweets})
     error: null, 
   }
 
-  
   const likeReducer = (state, action) => {
     switch (action.type) {
       case ("liked"): 
@@ -64,11 +65,15 @@ const TweetActionBar = ( {tweetId, isLiked, isRetweeted, numLikes, numRetweets})
     }
   }
 
+  //keeps track of the like state and put to server
   const [likeState, likeDispatch] = useReducer(likeReducer, initialLikeState);
   
+  //keeps track of the retweet state
   const [retweetState, retweetDispatch] = useReducer(retweetReducer, initialRetweetState);
 
+  //onClick function for the like button - puts to server
   const handleToggleLike = () => {
+      //to unlike a post
       if (likeState.isLikedByUser === true) {
         fetch(`/api/tweet/${tweetId}/like`, {
           method: "PUT",
@@ -80,7 +85,6 @@ const TweetActionBar = ( {tweetId, isLiked, isRetweeted, numLikes, numRetweets})
           })
           .then(res => res.json())
           .then(data => {
-            console.log("disliked")
             if (data.success === true) {
               likeDispatch ({
                 type: "unliked", 
@@ -88,13 +92,13 @@ const TweetActionBar = ( {tweetId, isLiked, isRetweeted, numLikes, numRetweets})
             }
           })
           .catch((err) => {
-            console.log("error for disliking tweet", err);
             likeDispatch ({
               type: "failed",
               error: err,
             })
           })
       }
+      //to like a post
       else {
         fetch(`/api/tweet/${tweetId}/like`, {
           method: "PUT",
@@ -106,7 +110,6 @@ const TweetActionBar = ( {tweetId, isLiked, isRetweeted, numLikes, numRetweets})
           })
           .then(res => res.json())
           .then(data => {
-            console.log("liked")
             if (data.success === true) {
               likeDispatch ({
                 type: "liked", 
@@ -114,7 +117,6 @@ const TweetActionBar = ( {tweetId, isLiked, isRetweeted, numLikes, numRetweets})
             }
           })
           .catch((err) => {
-            console.log("error for liking tweet", err);
             likeDispatch ({
               type: "failed",
               error: err,
@@ -123,27 +125,30 @@ const TweetActionBar = ( {tweetId, isLiked, isRetweeted, numLikes, numRetweets})
       }
     }
   
-  const handleToggleRetweet = () => {
-    if (retweetState.isRetweetedByUser === true) {
-      retweetDispatch ({
-        type: "unretweeted", 
-      })
+    //onClick function for retweet button
+    const handleToggleRetweet = () => {
+      if (retweetState.isRetweetedByUser === true) {
+        retweetDispatch ({
+          type: "unretweeted", 
+        })
+      }
+      else {
+        retweetDispatch ({
+          type: "retweeted", 
+        })
+      }
     }
-    else {
-      retweetDispatch ({
-        type: "retweeted", 
-      })
-    }
-  }
 
 
   return (
     <Wrapper>
+
       <div>
         <TweetAction color="rgb(27, 149, 224)" size={HIGHLIGHTSIZE}>
           <FiMessageCircle className="icon"/>
         </TweetAction>
       </div>
+
       <div>
         <>
         <TweetAction color="rgb(23, 191, 99)" size={HIGHLIGHTSIZE} onClick={handleToggleRetweet}>
@@ -152,6 +157,7 @@ const TweetActionBar = ( {tweetId, isLiked, isRetweeted, numLikes, numRetweets})
         <span>{retweetState.numberRetweets}</span>
         </>
       </div>
+
       <div>
         <>
         <TweetAction color="rgb(224, 36, 94)" size={HIGHLIGHTSIZE} onClick={handleToggleLike}>
@@ -160,6 +166,7 @@ const TweetActionBar = ( {tweetId, isLiked, isRetweeted, numLikes, numRetweets})
         <span>{likeState.numTweetLikes}</span>
         </>
       </div>
+
       <div>
         <TweetAction color="rgb(27, 149, 224)" size={HIGHLIGHTSIZE}>
           <FiUpload className="icon"/>
@@ -191,7 +198,5 @@ const Wrapper = styled.div`
     height: 18px;
   }
 `;
-
-
 
 export default TweetActionBar;

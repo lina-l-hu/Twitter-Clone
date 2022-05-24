@@ -8,7 +8,8 @@ In the client directory, run
 
 ### `yarn start`
 
-to start client in development mode at [http://localhost:3000](http://localhost:3000).
+to start client in development mode at [http://localhost:3000](http://localhost:3000)
+and to start server in development at [http://localhost:31415] (http://localhost:31415).
 
 
 ## File Structure
@@ -65,4 +66,5 @@ to start client in development mode at [http://localhost:3000](http://localhost:
 │   ├── package.json
 │   ├── README.md
 │   ├── yarn.lock
+│   ├── server (folder)
 ```

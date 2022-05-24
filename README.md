@@ -1,6 +1,6 @@
 # Twitter clone project - CRITTER 
 
-Project for Concordia Web Development Bootcamp. API was provided for the backend, front-end was built from scratch with React. 
+Project for Concordia Web Development Bootcamp. Backend API was provided, front-end was built from scratch with React. 
 
 ## Available Scripts
 
